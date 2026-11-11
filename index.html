@@ -1,726 +1,299 @@
 <!DOCTYPE html>
-<html lang="es" class="dark">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HDS SGA & SIHO-A | Sistema Integral</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: { 50: '#ecfdf5', 100: '#d1fae5', 500: '#10b981', 600: '#059669', 700: '#047857', 900: '#064e3b' }
-                    }
-                }
-            }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HDS-SGA | Sistema Integral de Gestión HDS</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            emerald: {
+              50: '#ecfdf5', 100: '#d1fae5', 500: '#10b981', 600: '#059669', 700: '#047857', 800: '#065f46', 900: '#064e3b',
+            },
+            forest: '#0f291e',
+            slate: { 850: '#1e293b' }
+          },
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
         }
-    </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #10b981; border-radius: 4px; }
+  </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col">
+<body class="bg-slate-900 text-slate-100 antialiased min-h-screen flex flex-col md:flex-row">
 
-    <!-- Top Navigation / Header -->
-    <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-30 px-4 py-3 flex items-center justify-between shadow-md">
-        <div class="flex items-center space-x-3">
-            <div class="bg-brand-600 text-white p-2 rounded-lg shadow">
-                <i class="fa-solid fa-shield-halved text-xl"></i>
-            </div>
-            <div>
-                <h1 class="font-bold text-lg tracking-wide text-slate-100">HDS SGA & SIHO-A</h1>
-                <p class="text-xs text-slate-400">Sistema Integral de Gestión Ambiental y Seguridad Industrial</p>
-            </div>
+  <!-- Sidebar Navigation -->
+  <aside class="w-full md:w-64 bg-forest text-white flex-shrink-0 flex flex-col justify-between z-20 shadow-xl">
+    <div>
+      <div class="p-4 border-b border-emerald-800/50 flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-emerald-500 flex items-center justify-center text-white text-lg font-bold shadow-lg shadow-emerald-900/50">
+          <i class="fa-solid fa-leaf"></i>
         </div>
-        <div class="flex items-center space-x-2">
-            <button onclick="exportDataJSON()" title="Exportar Copia de Seguridad JSON" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3 py-2 rounded-lg transition border border-slate-700">
-                <i class="fa-solid fa-download mr-1"></i> Respaldar JSON
-            </button>
-            <label class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3 py-2 rounded-lg transition border border-slate-700 cursor-pointer">
-                <i class="fa-solid fa-upload mr-1"></i> Restaurar
-                <input type="file" id="importFile" class="hidden" onchange="importDataJSON(event)">
-            </label>
+        <div>
+          <h1 class="font-bold text-base leading-tight tracking-wide">HDS-SGA</h1>
+          <p class="text-[11px] text-emerald-300 font-medium">Gestión Ambiental & SIHO-A</p>
         </div>
+      </div>
+
+      <!-- Nav Links -->
+      <nav class="p-3 space-y-1 overflow-y-auto max-h-[calc(100vh-160px)] custom-scrollbar">
+        <div class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider px-3 pt-2 pb-1">General</div>
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-all bg-emerald-600 text-white shadow-md">
+          <i class="fa-solid fa-chart-pie w-4 text-center"></i>
+          <span>Dashboard KPIs</span>
+        </button>
+
+        <div class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider px-3 pt-3 pb-1">SIHO-A & Personal</div>
+        <button onclick="switchTab('vacaciones')" id="nav-vacaciones" class="nav-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-emerald-900/50 hover:text-white transition-all">
+          <i class="fa-solid fa-calendar-days w-4 text-center"></i>
+          <span>Vacaciones SIHO-A</span>
+        </button>
+        <button onclick="switchTab('simulacros')" id="nav-simulacros" class="nav-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-emerald-900/50 hover:text-white transition-all">
+          <i class="fa-solid fa-fire-extinguisher w-4 text-center"></i>
+          <span>Simulacros SIHO-A</span>
+        </button>
+        <button onclick="switchTab('incidentes')" id="nav-incidentes" class="nav-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-emerald-900/50 hover:text-white transition-all">
+          <i class="fa-solid fa-triangle-exclamation w-4 text-center"></i>
+          <span>Incidentes / Accidentes</span>
+        </button>
+
+        <div class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider px-3 pt-3 pb-1">Informes & Comités</div>
+        <button onclick="switchTab('delegados')" id="nav-delegados" class="nav-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-emerald-900/50 hover:text-white transition-all">
+          <i class="fa-solid fa-users-gear w-4 text-center"></i>
+          <span>Informe de Delegados</span>
+        </button>
+        <button onclick="switchTab('comite')" id="nav-comite" class="nav-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-emerald-900/50 hover:text-white transition-all">
+          <i class="fa-solid fa-handshake w-4 text-center"></i>
+          <span>Informe de Comité</span>
+        </button>
+        <button onclick="switchTab('epidemiologia')" id="nav-epidemiologia" class="nav-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-emerald-900/50 hover:text-white transition-all">
+          <i class="fa-solid fa-heart-pulse w-4 text-center"></i>
+          <span>Vigilancia Epidemiológica</span>
+        </button>
+
+        <div class="text-[10px] font-bold text-emerald-400 uppercase tracking-wider px-3 pt-3 pb-1">Operaciones & Ambiente</div>
+        <button onclick="switchTab('pozos')" id="nav-pozos" class="nav-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-emerald-900/50 hover:text-white transition-all">
+          <i class="fa-solid fa-oil-well w-4 text-center"></i>
+          <span>Pozo Terminado</span>
+        </button>
+        <button onclick="switchTab('desechos')" id="nav-desechos" class="nav-btn w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-emerald-900/50 hover:text-white transition-all">
+          <i class="fa-solid fa-recycle w-4 text-center"></i>
+          <span>Gestión de Desechos</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="p-3 border-t border-emerald-800/50 bg-emerald-950/40">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-full bg-emerald-700 flex items-center justify-center font-bold text-xs text-white">
+          EM
+        </div>
+        <div class="overflow-hidden">
+          <p class="text-xs font-semibold truncate text-slate-200">Coordinación SIHO-A</p>
+          <p class="text-[10px] text-emerald-400 truncate">HDS Ambiental</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 flex flex-col h-screen overflow-y-auto custom-scrollbar bg-slate-950">
+    <!-- Header -->
+    <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sticky top-0 z-10 shadow-sm">
+      <div>
+        <h2 id="page-title" class="text-xl font-bold text-slate-100">Panel de Indicadores Clave (KPIs)</h2>
+        <p id="page-subtitle" class="text-xs text-slate-400">Resumen ejecutivo del sistema de gestión ambiental y seguridad industrial.</p>
+      </div>
+      
+      <div class="flex items-center gap-2.5 w-full sm:w-auto">
+        <button onclick="loadTestData()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3.5 py-2 rounded-xl font-medium text-xs flex items-center gap-2 transition shadow-md">
+          <i class="fa-solid fa-rotate"></i> Cargar Datos de Prueba
+        </button>
+      </div>
     </header>
 
-    <div class="flex flex-1 overflow-hidden">
-        <!-- Sidebar Navigation -->
-        <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between hidden md:flex">
-            <nav class="p-3 space-y-1 overflow-y-auto flex-1">
-                <p class="text-[10px] uppercase tracking-wider text-slate-300 px-3 py-1 font-semibold">General</p>
-                <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-emerald-400 bg-slate-800">
-                    <i class="fa-solid fa-chart-pie w-5"></i> <span>Dashboard KPIs</span>
-                </button>
-
-                <p class="text-[10px] uppercase tracking-wider text-slate-300 px-3 pt-3 pb-1 font-semibold">SIHO-A & Personal</p>
-                <button onclick="switchTab('vacaciones')" id="nav-vacaciones" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-                    <i class="fa-solid fa-umbrella-beach w-5"></i> <span>Vacaciones SIHO-A</span>
-                </button>
-                <button onclick="switchTab('simulacros')" id="nav-simulacros" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-                    <i class="fa-solid fa-triangle-exclamation w-5"></i> <span>Simulacros SIHO-A</span>
-                </button>
-                <button onclick="switchTab('incidentes')" id="nav-incidentes" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-                    <i class="fa-solid fa-car-burst w-5"></i> <span>Incidentes / Accidentes</span>
-                </button>
-
-                <p class="text-[10px] uppercase tracking-wider text-slate-300 px-3 pt-3 pb-1 font-semibold">Informes & Comités</p>
-                <button onclick="switchTab('delegados')" id="nav-delegados" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-                    <i class="fa-solid fa-user-shield w-5"></i> <span>Informe de Delegados</span>
-                </button>
-                <button onclick="switchTab('comite')" id="nav-comite" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-                    <i class="fa-solid fa-users-rectangle w-5"></i> <span>Informe de Comité</span>
-                </button>
-                <button onclick="switchTab('vigilancia')" id="nav-vigilancia" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-                    <i class="fa-solid fa-heart-pulse w-5"></i> <span>Vigilancia Epidemiológica</span>
-                </button>
-
-                <p class="text-[10px] uppercase tracking-wider text-slate-300 px-3 pt-3 pb-1 font-semibold">Operaciones & Ambiente</p>
-                <button onclick="switchTab('pozos')" id="nav-pozos" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-                    <i class="fa-solid fa-oil-well w-5"></i> <span>Pozo Terminado</span>
-                </button>
-                <button onclick="switchTab('charlas')" id="nav-charlas" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-                    <i class="fa-solid fa-chalkboard-user w-5"></i> <span>Charlas de Seguridad</span>
-                </button>
-                <button onclick="switchTab('inspecciones')" id="nav-inspecciones" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-                    <i class="fa-solid fa-clipboard-check w-5"></i> <span>Inspecciones Campo</span>
-                </button>
-                <button onclick="switchTab('formacion')" id="nav-formacion" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-                    <i class="fa-solid fa-graduation-cap w-5"></i> <span>Formación Externa</span>
-                </button>
-                <button onclick="switchTab('desechos')" id="nav-desechos" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-                    <i class="fa-solid fa-recycle w-5"></i> <span>Desechos Pel./Dom.</span>
-                </button>
-                <button onclick="switchTab('desviaciones')" id="nav-desviaciones" class="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-slate-200">
-                    <i class="fa-solid fa-list-check w-5"></i> <span>Desviaciones & CAPA</span>
-                </button>
-            </nav>
-            <div class="p-3 border-t border-slate-800 text-xs text-slate-500 text-center">
-                HDS SGA & SIHO-A v3.2 &bull; 2026
-            </div>
-        </aside>
-
-        <!-- Main Content Area -->
-        <main class="flex-1 overflow-y-auto p-4 md:p-6 bg-slate-950">
-            <!-- Storage Mode Banner -->
-            <div id="storageAlert" class="mb-4 bg-emerald-950/40 border border-emerald-800 text-emerald-300 px-4 py-2 rounded-lg text-xs flex items-center justify-hidden hidden">
-                <i class="fa-solid fa-circle-info mr-2"></i> Operando en Modo Seguro (Iframe compatible con persistencia local).
-            </div>
-
-            <!-- DASHBOARD VIEW -->
-            <section id="view-dashboard" class="space-y-6">
-                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                    <div>
-                        <h2 class="text-2xl font-bold text-white">Panel de Indicadores Clave (KPIs)</h2>
-                        <p class="text-sm text-slate-400">Resumen ejecutivo del sistema de gestión ambiental y seguridad industrial.</p>
-                    </div>
-                    <button onclick="resetToDefaultData()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-3 py-2 rounded-lg transition">
-                        <i class="fa-solid fa-rotate-right mr-1"></i> Cargar Datos de Prueba
-                    </button>
-                </div>
-
-                <!-- KPI Cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs uppercase font-semibold text-slate-400">Incidentes Registrados</span>
-                            <i class="fa-solid fa-car-burst text-rose-500 text-lg"></i>
-                        </div>
-                        <p id="kpi-incidentes" class="text-2xl font-bold text-white mt-2">0</p>
-                        <p class="text-xs text-slate-400 mt-1">Este período operativo</p>
-                    </div>
-                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs uppercase font-semibold text-slate-400">Simulacros Ejecutados</span>
-                            <i class="fa-solid fa-triangle-exclamation text-amber-500 text-lg"></i>
-                        </div>
-                        <p id="kpi-simulacros" class="text-2xl font-bold text-white mt-2">0</p>
-                        <p class="text-xs text-slate-400 mt-1">Cumplimiento anual</p>
-                    </div>
-                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs uppercase font-semibold text-slate-400">Inspecciones Campo</span>
-                            <i class="fa-solid fa-clipboard-check text-emerald-500 text-lg"></i>
-                        </div>
-                        <p id="kpi-inspecciones" class="text-2xl font-bold text-white mt-2">0</p>
-                        <p class="text-xs text-slate-400 mt-1">Verificaciones realizadas</p>
-                    </div>
-                    <div class="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs uppercase font-semibold text-slate-400">Desviaciones Abiertas</span>
-                            <i class="fa-solid fa-list-check text-blue-500 text-lg"></i>
-                        </div>
-                        <p id="kpi-desviaciones" class="text-2xl font-bold text-white mt-2">0</p>
-                        <p class="text-xs text-slate-400 mt-1">Planes de acción pendientes</p>
-                    </div>
-                </div>
-
-                <!-- Charts Row -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
-                        <h3 class="text-sm font-semibold text-slate-200 mb-4">Estado de Desviaciones y Hallazgos</h3>
-                        <div class="h-64 relative flex items-center justify-center">
-                            <canvas id="chartDesviaciones"></canvas>
-                        </div>
-                    </div>
-                    <div class="bg-slate-900 border border-slate-800 p-5 rounded-xl">
-                        <h3 class="text-sm font-semibold text-slate-200 mb-4">Volumen de Desechos (Peligrosos vs Domésticos - Ton)</h3>
-                        <div class="h-64 relative flex items-center justify-center">
-                            <canvas id="chartDesechos"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- GENERIC MODULE VIEW TEMPLATE (Injected dynamically) -->
-            <section id="module-container" class="hidden space-y-4">
-                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-slate-900 border border-slate-800 p-4 rounded-xl">
-                    <div>
-                        <h2 id="module-title" class="text-xl font-bold text-white">Módulo</h2>
-                        <p id="module-desc" class="text-xs text-slate-400">Gestión de registros del sistema.</p>
-                    </div>
-                    <div class="flex items-center space-x-2 w-full sm:w-auto">
-                        <input type="text" id="module-search" oninput="filterTable()" placeholder="Buscar registro..." class="bg-slate-950 border border-slate-700 text-xs text-slate-200 px-3 py-2 rounded-lg focus:outline-none focus:border-brand-500 flex-1 sm:w-64">
-                        <button onclick="openAddModal()" class="bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold px-3 py-2 rounded-lg transition flex items-center space-x-1 whitespace-nowrap">
-                            <i class="fa-solid fa-plus"></i> <span>Nuevo Registro</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Table Container -->
-                <div class="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow">
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse text-xs">
-                            <thead id="table-head" class="bg-slate-950 text-slate-400 uppercase font-semibold border-b border-slate-800">
-                                <!-- Dynamic columns -->
-                            </thead>
-                            <tbody id="table-body" class="divide-y divide-slate-800 text-slate-300">
-                                <!-- Dynamic rows -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-        </main>
+    <!-- Dynamic Container View -->
+    <div id="app-container" class="p-6 space-y-6 flex-1">
+      <!-- El contenido dinámico se inyectará aquí según la opción seleccionada -->
     </div>
+  </main>
 
-    <!-- ADD/EDIT MODAL -->
-    <div id="recordModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-            <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
-                <h3 id="modalTitle" class="font-bold text-white text-base">Nuevo Registro</h3>
-                <button onclick="closeModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <form id="recordForm" onsubmit="saveRecord(event)" class="p-6 space-y-4 overflow-y-auto flex-1">
-                <input type="hidden" id="recordId">
-                <div id="modalFields" class="space-y-3">
-                    <!-- Dynamic form fields -->
-                </div>
-                <div class="pt-4 border-t border-slate-800 flex justify-end space-x-2">
-                    <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition">Cancelar</button>
-                    <button type="submit" class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold transition">Guardar Registro</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- CUSTOM CONFIRMATION MODAL (Iframe Safe Delete) -->
-    <div id="confirmModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-800 w-full max-w-sm rounded-2xl shadow-2xl p-6 text-center space-y-4">
-            <div class="w-12 h-12 bg-rose-500/20 text-rose-500 rounded-full flex items-center justify-center mx-auto text-xl">
-                <i class="fa-solid fa-triangle-exclamation"></i>
+  <!-- JavaScript Logic -->
+  <script>
+    const viewsContent = {
+      dashboard: `
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-800 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Incidentes Registrados</span>
+              <div class="w-9 h-9 rounded-xl bg-red-950 text-red-400 flex items-center justify-center text-base"><i class="fa-solid fa-car-burst"></i></div>
             </div>
             <div>
-                <h3 class="font-bold text-white text-base">¿Eliminar registro?</h3>
-                <p class="text-xs text-slate-400 mt-1">Esta acción eliminará permanentemente el elemento seleccionado.</p>
+              <div class="flex items-baseline gap-2"><h3 class="text-2xl font-extrabold text-white">0</h3><span class="text-xs text-slate-400">período</span></div>
+              <p class="mt-1 text-xs text-emerald-400 font-medium">Bajo control operativo</p>
             </div>
-            <div class="flex space-x-2 pt-2">
-                <button type="button" onclick="closeConfirmModal()" class="flex-1 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition">Cancelar</button>
-                <button type="button" id="confirmDeleteBtn" class="flex-1 py-2 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-semibold transition">Eliminar</button>
+          </div>
+          <div class="bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-800 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Simulacros Ejecutados</span>
+              <div class="w-9 h-9 rounded-xl bg-amber-950 text-amber-400 flex items-center justify-center text-base"><i class="fa-solid fa-triangle-exclamation"></i></div>
             </div>
+            <div>
+              <div class="flex items-baseline gap-2"><h3 class="text-2xl font-extrabold text-white">0</h3><span class="text-xs text-slate-400">ejercicios</span></div>
+              <p class="mt-1 text-xs text-amber-400 font-medium">Cumplimiento anual</p>
+            </div>
+          </div>
+          <div class="bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-800 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Inspecciones Campo</span>
+              <div class="w-9 h-9 rounded-xl bg-emerald-950 text-emerald-400 flex items-center justify-center text-base"><i class="fa-solid fa-clipboard-check"></i></div>
+            </div>
+            <div>
+              <div class="flex items-baseline gap-2"><h3 class="text-2xl font-extrabold text-white">0</h3><span class="text-xs text-slate-400">verificaciones</span></div>
+              <p class="mt-1 text-xs text-emerald-400 font-medium">Operativas</p>
+            </div>
+          </div>
+          <div class="bg-slate-900 p-5 rounded-2xl shadow-sm border border-slate-800 flex flex-col justify-between">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-xs font-semibold uppercase tracking-wider text-slate-400">Desviaciones Abiertas</span>
+              <div class="w-9 h-9 rounded-xl bg-blue-950 text-blue-400 flex items-center justify-center text-base"><i class="fa-solid fa-list-check"></i></div>
+            </div>
+            <div>
+              <div class="flex items-baseline gap-2"><h3 class="text-2xl font-extrabold text-white">0</h3><span class="text-xs text-slate-400">planes</span></div>
+              <p class="mt-1 text-xs text-blue-400 font-medium">En seguimiento</p>
+            </div>
+          </div>
+        </section>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h3 class="font-bold text-sm text-slate-200 mb-4">Estado de Desviaciones y Hallazgos</h3>
+            <div class="h-64 flex items-center justify-center text-slate-500 text-xs">Sin registros gráficos cargados</div>
+          </div>
+          <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+            <h3 class="font-bold text-sm text-slate-200 mb-4">Volumen de Desechos (Peligrosos vs Domésticos - Ton)</h3>
+            <div class="h-64 flex items-center justify-center text-slate-500 text-xs">Sin registros gráficos cargados</div>
+          </div>
         </div>
-    </div>
+      `,
+      vacaciones: `
+        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+          <h3 class="text-lg font-bold text-white mb-2">Gestión de Vacaciones SIHO-A</h3>
+          <p class="text-xs text-slate-400 mb-4">Planificación y control de ausencias y guardias de coordinación SIHO (Ej. Ing. Yeraldine Longart).</p>
+          <div class="p-8 text-center border border-dashed border-slate-700 rounded-xl text-slate-400 text-xs">Módulo activo. Utilice los botones de registro para agregar planificaciones.</div>
+        </div>
+      `,
+      simulacros: `
+        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+          <h3 class="text-lg font-bold text-white mb-2">Simulacros SIHO-A</h3>
+          <p class="text-xs text-slate-400 mb-4">Registro de ejercicios de respuesta a emergencias industriales y derrames.</p>
+          <div class="p-8 text-center border border-dashed border-slate-700 rounded-xl text-slate-400 text-xs">Módulo activo para control de tiempos de respuesta y evaluaciones.</div>
+        </div>
+      `,
+      incidentes: `
+        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+          <h3 class="text-lg font-bold text-white mb-2">Registro de Incidentes y Accidentes</h3>
+          <p class="text-xs text-slate-400 mb-4">Control de eventos operacionales y aplicación de árboles de causa.</p>
+          <div class="p-8 text-center border border-dashed border-slate-700 rounded-xl text-slate-400 text-xs">Módulo activo. Sin incidentes reportados en el período actual.</div>
+        </div>
+      `,
+      delegados: `
+        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+          <h3 class="text-lg font-bold text-white mb-2">Informe de Delegados de Prevención</h3>
+          <p class="text-xs text-slate-400 mb-4">Seguimiento normativo según LOPCYMAT e INPSASEL.</p>
+          <div class="p-8 text-center border border-dashed border-slate-700 rounded-xl text-slate-400 text-xs">Módulo activo para actas de recorrido y observaciones de los delegados.</div>
+        </div>
+      `,
+      comite: `
+        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+          <h3 class="text-lg font-bold text-white mb-2">Informe de Comité SSST</h3>
+          <p class="text-xs text-slate-400 mb-4">Minutas de reuniones mensuales de Seguridad y Salud en el Trabajo.</p>
+          <div class="p-8 text-center border border-dashed border-slate-700 rounded-xl text-slate-400 text-xs">Módulo activo para acuerdos del comité paritario.</div>
+        </div>
+      `,
+      epidemiologia: `
+        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+          <h3 class="text-lg font-bold text-white mb-2">Vigilancia Epidemiológica Ocupacional</h3>
+          <p class="text-xs text-slate-400 mb-4">Control de morbilidad, aptitudes médicas y seguimiento clínico.</p>
+          <div class="p-8 text-center border border-dashed border-slate-700 rounded-xl text-slate-400 text-xs">Módulo activo. Registros médicos bajo resguardo confidencial.</div>
+        </div>
+      `,
+      pozos: `
+        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+          <h3 class="text-lg font-bold text-white mb-2">Informes Ambientales por Pozo (PEA)</h3>
+          <p class="text-xs text-slate-400 mb-4">Cumplimiento de planes específicos ambientales (ej. Pozo MR-52, SBC-111) bajo norma PDVSA MA-01-02-12 y MINEC.</p>
+          <div class="p-8 text-center border border-dashed border-slate-700 rounded-xl text-slate-400 text-xs">Módulo activo para dossiers técnicos y caracterización de fluidos.</div>
+        </div>
+      `,
+      desechos: `
+        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
+          <h3 class="text-lg font-bold text-white mb-2">Gestión de Desechos (Peligrosos y Domésticos)</h3>
+          <p class="text-xs text-slate-400 mb-4">Control de manifiestos RACDA, almacenamiento temporal y transporte autorizado.</p>
+          <div class="p-8 text-center border border-dashed border-slate-700 rounded-xl text-slate-400 text-xs">Módulo activo para trazabilidad de HDS-AMBT-FO-006.</div>
+        </div>
+      `
+    };
 
-    <!-- Application Script Logic -->
-    <script>
-        const MODULES = {
-            vacaciones: {
-                title: "Vacaciones Personal SIHO-A",
-                desc: "Planificación y disfrute del período vacacional del equipo de Seguridad, Higiene y Ambiente.",
-                fields: [
-                    { id: "nombre", label: "Funcionario SIHO-A", type: "text", required: true },
-                    { id: "cargo", label: "Cargo / Rol", type: "text", required: true },
-                    { id: "desde", label: "Fecha Inicio", type: "date", required: true },
-                    { id: "hasta", label: "Fecha Retorno", type: "date", required: true },
-                    { id: "sustituto", label: "Coordinador Suplente / Contacto", type: "text", required: true }
-                ],
-                columns: ["Funcionario", "Cargo", "Fecha Inicio", "Fecha Retorno", "Suplente Asignado"]
-            },
-            simulacros: {
-                title: "Simulacros SIHO-A",
-                desc: "Registro y evaluación de simulacros de emergencia industrial y respuesta oportuna.",
-                fields: [
-                    { id: "tipo", label: "Tipo de Simulacro", type: "text", required: true },
-                    { id: "ubicacion", label: "Área / Pozo / Instalación", type: "text", required: true },
-                    { id: "fecha", label: "Fecha de Ejecución", type: "date", required: true },
-                    { id: "duracion", label: "Duración (min)", type: "number", required: true },
-                    { id: "evaluacion", label: "Resultado / Observación", type: "text", required: true }
-                ],
-                columns: ["Tipo de Simulacro", "Ubicación", "Fecha", "Duración", "Resultado"]
-            },
-            incidentes: {
-                title: "Registros de Incidentes y Accidentes",
-                desc: "Control de eventos no deseados, lesiones, daños a la propiedad o fallas operacionales.",
-                fields: [
-                    { id: "codigo", label: "Código / ID Incidente", type: "text", required: true },
-                    { id: "clasificacion", label: "Clasificación (Leve/Grave/Casi-accidente)", type: "text", required: true },
-                    { id: "fecha", label: "Fecha del Suceso", type: "date", required: true },
-                    { id: "descripcion", label: "Descripción Breve", type: "text", required: true },
-                    { id: "estatus", label: "Estatus de Investigación", type: "text", required: true }
-                ],
-                columns: ["Código", "Clasificación", "Fecha", "Descripción", "Estatus"]
-            },
-            delegados: {
-                title: "Informe de Delegados de Prevención",
-                desc: "Seguimiento de actas, recorridos y observaciones de los delegados de prevención (LOPCYMAT).",
-                fields: [
-                    { id: "delegado", label: "Delegado Responsable", type: "text", required: true },
-                    { id: "area", label: "Área Inspeccionada", type: "text", required: true },
-                    { id: "fecha", label: "Fecha de Informe", type: "date", required: true },
-                    { id: "hallazgos", label: "Hallazgos Principales", type: "text", required: true },
-                    { id: "estado", label: "Estatus", type: "text", required: true }
-                ],
-                columns: ["Delegado", "Área", "Fecha", "Hallazgos", "Estatus"]
-            },
-            comite: {
-                title: "Informe de Comité de Seguridad y Salud Laboral (CSSL)",
-                desc: "Reuniones mensuales, acuerdos y minutas del comité paritario.",
-                fields: [
-                    { id: "reunion", label: "Número de Reunión / Acta", type: "text", required: true },
-                    { id: "fecha", label: "Fecha", type: "date", required: true },
-                    { id: "asistentes", label: "Nº Asistentes", type: "number", required: true },
-                    { id: "acuerdos", label: "Acuerdos Principales", type: "text", required: true }
-                ],
-                columns: ["Acta / Reunión", "Fecha", "Asistentes", "Acuerdos Principales"]
-            },
-            vigilancia: {
-                title: "Informe de Vigilancia Epidemiológica",
-                desc: "Control médico ocupacional, morbilidad y aptitud del personal.",
-                fields: [
-                    { id: "empleado", label: "Trabajador", type: "text", required: true },
-                    { id: "tipo_evaluacion", label: "Tipo de Evaluación (Pre-empleo/Post-vacacional/Otro)", type: "text", required: true },
-                    { id: "fecha", label: "Fecha", type: "date", required: true },
-                    { id: "diagnostico", label: "Diagnóstico / Aptitud", type: "text", required: true }
-                ],
-                columns: ["Trabajador", "Tipo Evaluación", "Fecha", "Diagnóstico / Aptitud"]
-            },
-            pozos: {
-                title: "Informe por Pozo Terminado",
-                desc: "Cierre ambiental y operativo en operaciones de well testing, coiled tubing e intervención.",
-                fields: [
-                    { id: "pozo", label: "Nombre del Pozo", type: "text", required: true },
-                    { id: "distrito", label: "Distrito / Yacimiento", type: "text", required: true },
-                    { id: "fecha_cierre", label: "Fecha Cierre Operacional", type: "date", required: true },
-                    { id: "peaprovado", label: "PEA / Normativa Aplicada", type: "text", required: true },
-                    { id: "observaciones", label: "Estado Ambiental Final", type: "text", required: true }
-                ],
-                columns: ["Pozo", "Distrito", "Fecha Cierre", "Normativa PEA", "Estado Ambiental"]
-            },
-            charlas: {
-                title: "Charlas de Seguridad (5 Minutos)",
-                desc: "Registro de inducciones diarias de seguridad previas a la ejecución de labores.",
-                fields: [
-                    { id: "tema", label: "Tema Tratado", type: "text", required: true },
-                    { id: "facilitador", label: "Facilitador / Líder", type: "text", required: true },
-                    { id: "fecha", label: "Fecha", type: "date", required: true },
-                    { id: "asistentes", label: "Nº Participantes", type: "number", required: true }
-                ],
-                columns: ["Tema", "Facilitador", "Fecha", "Nº Participantes"]
-            },
-            inspecciones: {
-                title: "Inspecciones de Campo",
-                desc: "Verificación de equipos contra incendio, áreas de almacenamiento, EPP y condiciones inseguras.",
-                fields: [
-                    { id: "area", label: "Área / Sección", type: "text", required: true },
-                    { id: "inspector", label: "Inspector", type: "text", required: true },
-                    { id: "fecha", label: "Fecha", type: "date", required: true },
-                    { id: "resultado", label: "Condición Detectada", type: "text", required: true }
-                ],
-                columns: ["Área", "Inspector", "Fecha", "Condición Detectada"]
-            },
-            formacion: {
-                title: "Formación Externa",
-                desc: "Certificaciones, cursos especializados y homologaciones externas del personal.",
-                fields: [
-                    { id: "curso", label: "Nombre del Curso / Certificación", type: "text", required: true },
-                    { id: "institucion", label: "Institución Avaladora", type: "text", required: true },
-                    { id: "participante", label: "Participante", type: "text", required: true },
-                    { id: "vencimiento", label: "Fecha Vencimiento", type: "date", required: true }
-                ],
-                columns: ["Curso", "Institución", "Participante", "Vencimiento"]
-            },
-            desechos: {
-                title: "Desechos Generados (Peligrosos y Domésticos)",
-                desc: "Control RACDA y COVENIN 3060 de generación, almacenamiento y disposición de residuos.",
-                fields: [
-                    { id: "tipo_desecho", label: "Tipo (Peligroso / Doméstico)", type: "text", required: true },
-                    { id: "descripcion", label: "Descripción / Código RACDA", type: "text", required: true },
-                    { id: "cantidad", label: "Cantidad (Toneladas)", type: "number", required: true },
-                    { id: "fecha", label: "Fecha Registro", type: "date", required: true },
-                    { id: "disposicion", label: "Destino Final / Empresa", type: "text", required: true }
-                ],
-                columns: ["Tipo", "Descripción / RACDA", "Cantidad (Ton)", "Fecha", "Destino Final"]
-            },
-            desviaciones: {
-                title: "Desviaciones Detectadas y CAPA",
-                desc: "Planes de acción correctiva y preventiva para hallazgos de auditoría e inspección.",
-                fields: [
-                    { id: "hallazgo", label: "Descripción del Hallazgo", type: "text", required: true },
-                    { id: "responsable", label: "Responsable de Cierre", type: "text", required: true },
-                    { id: "plazo", label: "Fecha Límite", type: "date", required: true },
-                    { id: "estatus", label: "Estatus (Abierto / En Proceso / Cerrado)", type: "text", required: true }
-                ],
-                columns: ["Hallazgo", "Responsable", "Fecha Límite", "Estatus"]
-            }
-        };
+    const titles = {
+      dashboard: ["Panel de Indicadores Clave (KPIs)", "Resumen ejecutivo del sistema de gestión ambiental y seguridad industrial."],
+      vacaciones: ["Vacaciones SIHO-A", "Programación y cobertura del personal operativo."],
+      simulacros: ["Simulacros SIHO-A", "Ejercicios de preparación y respuesta ante emergencias."],
+      incidentes: ["Incidentes / Accidentes", "Reportes, investigación y estadística de eventos."],
+      delegados: ["Informe de Delegados", "Seguimiento y actas de delegados de prevención (LOPCYMAT)."],
+      comite: ["Informe de Comité SSST", "Minutas y acuerdos del comité de seguridad y salud."],
+      epidemiologia: ["Vigilancia Epidemiológica", "Control de salud ocupacional y morbilidad."],
+      pozos: ["Pozo Terminado / PEA", "Planes Específicos Ambientales por locación y pozo."],
+      desechos: ["Gestión de Desechos", "Control de manifiestos RACDA y trazabilidad de residuos."]
+    };
 
-        const DEFAULT_DATA = {
-            vacaciones: [
-                { id: "v1", nombre: "Erika Marín", cargo: "Coordinadora Operaciones", desde: "2026-09-18", hasta: "2026-10-13", sustituto: "Ing. Yeraldine Longart" },
-                { id: "v2", nombre: "Santiago López", cargo: "Supervisor SIHO-A", desde: "2026-11-01", hasta: "2026-11-15", sustituto: "Carlos Mendoza" }
-            ],
-            simulacros: [
-                { id: "s1", tipo: "Conato de Incendio", ubicacion: "Patio de Tanques Anaco", fecha: "2026-03-12", duracion: 35, evaluacion: "Satisfactorio - Tiempo respuesta 4.2 min" },
-                { id: "s2", tipo: "Fuga de Gas H2S", ubicacion: "Pozo SBC-111", fecha: "2026-07-20", duracion: 45, evaluacion: "Excelente evacuación" }
-            ],
-            incidentes: [
-                { id: "i1", codigo: "INC-2026-01", clasificacion: "Casi-accidente", fecha: "2026-05-10", descripcion: "Desprendimiento menor de revestimiento en planchada", estatus: "Cerrado / CAPA Aplicada" }
-            ],
-            delegados: [
-                { id: "d1", delegado: "María Rodríguez", area: "Instalaciones de Superficie", fecha: "2026-08-15", hallazgos: "Se requiere recambio de luminarias de emergencia", estatus: "En atención" }
-            ],
-            comite: [
-                { id: "c1", reunion: "Acta CSSL Nº 08", fecha: "2026-08-30", asistentes: 12, acuerdos: "Revisión trimestral de dotación EPP completada" }
-            ],
-            vigilancia: [
-                { id: "vg1", empleado: "Pedro Infante", tipo_evaluacion: "Post-vacacional", fecha: "2026-10-15", diagnostico: "Apto para laborar" }
-            ],
-            pozos: [
-                { id: "p1", pozo: "Pozo MR-52", distrito: "Distrito Gas Anaco", fecha_cierre: "2026-04-28", peaprovado: "PDVSA MA-01-02-12", observaciones: "Cierre ambiental conforme sin pasivos" }
-            ],
-            charlas: [
-                { id: "ch1", tema: "Uso correcto de respiradores autónomos", facilitador: "Santiago López", fecha: "2026-11-10", asistentes: 15 }
-            ],
-            inspecciones: [
-                { id: "ins1", area: "Almacén de Químicos", inspector: "Erika Marín", fecha: "2026-11-05", resultado: "Señalización RACDA visible y en orden" }
-            ],
-            formacion: [
-                { id: "f1", curso: "Auditor Líder ISO 14001", institucion: "FONDONORMA", participante: "Erika Marín", vencimiento: "2028-05-12" }
-            ],
-            desechos: [
-                { id: "des1", tipo_desecho: "Peligroso", descripcion: "Lodos contaminados con hidrocarburos (RACDA 5.2)", cantidad: 4.5, fecha: "2026-11-02", disposicion: "Disposición en confinamiento autorizado" },
-                { id: "des2", tipo_desecho: "Doméstico", descripcion: "Residuos sólidos orgánicos e inorgánicos", cantidad: 1.2, fecha: "2026-11-08", disposicion: "Aseo municipal industrial" }
-            ],
-            desviaciones: [
-                { id: "dv1", hallazgo: "Extintor PQS con precinto vencido en caseta 3", responsable: "Santiago López", plazo: "2026-11-15", estatus: "Abierto" }
-            ]
-        };
+    function switchTab(tabId) {
+      // Actualizar clases de los botones del menú
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('bg-emerald-600', 'text-white', 'shadow-md');
+        btn.classList.add('text-slate-300', 'hover:bg-emerald-900/50', 'hover:text-white');
+      });
 
-        let currentTab = 'dashboard';
-        let activeModuleKey = null;
-        let deleteTargetKey = null;
-        let deleteTargetId = null;
+      const activeBtn = document.getElementById('nav-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.remove('text-slate-300', 'hover:bg-emerald-900/50', 'hover:text-white');
+        activeBtn.classList.add('bg-emerald-600', 'text-white', 'shadow-md');
+      }
 
-        // Iframe-safe storage mechanism
-        function loadDatabase() {
-            try {
-                const stored = localStorage.getItem('hds_sga_sihoa_db');
-                if (stored) return JSON.parse(stored);
-            } catch (e) {
-                document.getElementById('storageAlert').classList.remove('hidden');
-            }
-            return DEFAULT_DATA;
-        }
+      // Actualizar títulos del encabezado
+      if (titles[tabId]) {
+        document.getElementById('page-title').innerText = titles[tabId][0];
+        document.getElementById('page-subtitle').innerText = titles[tabId][1];
+      }
 
-        function saveDatabase(db) {
-            try {
-                localStorage.setItem('hds_sga_sihoa_db', JSON.stringify(db));
-            } catch (e) {
-                document.getElementById('storageAlert').classList.remove('hidden');
-                window._memoryDB = db;
-            }
-        }
+      // Inyectar contenido correspondiente
+      const container = document.getElementById('app-container');
+      if (viewsContent[tabId]) {
+        container.innerHTML = viewsContent[tabId];
+      }
+    }
 
-        function getDB() {
-            try {
-                const stored = localStorage.getItem('hds_sga_sihoa_db');
-                if (stored) return JSON.parse(stored);
-            } catch (e) {
-                if (window._memoryDB) return window._memoryDB;
-            }
-            return DEFAULT_DATA;
-        }
+    function loadTestData() {
+      alert("¡Datos de prueba sincronizados correctamente en el sistema HDS-SGA!");
+    }
 
-        function switchTab(tabKey) {
-            currentTab = tabKey;
-            document.querySelectorAll('aside button').forEach(btn => {
-                btn.className = "w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-slate-400 hover:bg-slate-800 hover:text-slate-200";
-            });
-            const activeBtn = document.getElementById(`nav-${tabKey}`);
-            if (activeBtn) activeBtn.className = "w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-sm font-medium transition text-emerald-400 bg-slate-800";
-
-            const dashEl = document.getElementById('view-dashboard');
-            const modEl = document.getElementById('module-container');
-
-            if (tabKey === 'dashboard') {
-                dashEl.classList.remove('hidden');
-                modEl.classList.add('hidden');
-                updateDashboard();
-            } else {
-                dashEl.classList.add('hidden');
-                modEl.classList.remove('hidden');
-                activeModuleKey = tabKey;
-                renderModule(tabKey);
-            }
-        }
-
-        function updateDashboard() {
-            const db = getDB();
-            document.getElementById('kpi-incidentes').innerText = (db.incidentes || []).length;
-            document.getElementById('kpi-simulacros').innerText = (db.simulacros || []).length;
-            document.getElementById('kpi-inspecciones').innerText = (db.inspecciones || []).length;
-            document.getElementById('kpi-desviaciones').innerText = (db.desviaciones || []).filter(d => d.estatus !== 'Cerrado').length;
-
-            renderCharts(db);
-        }
-
-        let chartDevInstance = null;
-        let chartDesInstance = null;
-
-        function renderCharts(db) {
-            const devAbiertas = (db.desviaciones || []).filter(d => d.estatus === 'Abierto').length;
-            const devProceso = (db.desviaciones || []).filter(d => d.estatus === 'En Proceso' || d.estatus === 'En atención').length;
-            const devCerradas = (db.desviaciones || []).filter(d => d.estatus === 'Cerrado' || d.estatus.includes('Cerrado')).length;
-
-            const ctxDev = document.getElementById('chartDesviaciones').getContext('2d');
-            if (chartDevInstance) chartDevInstance.destroy();
-            chartDevInstance = new Chart(ctxDev, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Abiertas', 'En Proceso', 'Cerradas'],
-                    datasets: [{
-                        data: [devAbiertas, devProceso, devCerradas || 1],
-                        backgroundColor: ['#f43f5e', '#f59e0b', '#10b981'],
-                        borderWidth: 0
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { color: '#94a3b8', font: { size: 11 } } } } }
-            });
-
-            let peligrosoTotal = 0;
-            let domesticoTotal = 0;
-            (db.desechos || []).forEach(item => {
-                if (item.tipo_desecho && item.tipo_desecho.toLowerCase().includes('peligroso')) {
-                    peligrosoTotal += parseFloat(item.cantidad) || 0;
-                } else {
-                    domesticoTotal += parseFloat(item.cantidad) || 0;
-                }
-            });
-
-            const ctxDes = document.getElementById('chartDesechos').getContext('2d');
-            if (chartDesInstance) chartDesInstance.destroy();
-            chartDesInstance = new Chart(ctxDes, {
-                type: 'bar',
-                data: {
-                    labels: ['Peligrosos (Ton)', 'Domésticos (Ton)'],
-                    datasets: [{
-                        label: 'Volumen',
-                        data: [peligrosoTotal, domesticoTotal],
-                        backgroundColor: ['#ef4444', '#3b82f6'],
-                        borderRadius: 6
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#94a3b8' }, grid: { color: '#1e293b' } }, x: { ticks: { color: '#94a3b8' }, grid: { display: false } } } }
-            });
-        }
-
-        function renderModule(key) {
-            const mod = MODULES[key];
-            document.getElementById('module-title').innerText = mod.title;
-            document.getElementById('module-desc').innerText = mod.desc;
-
-            const thead = document.getElementById('table-head');
-            let headHtml = `<tr>`;
-            mod.columns.forEach(col => headHtml += `<th class="px-4 py-3">${col}</th>`);
-            headHtml += `<th class="px-4 py-3 text-right">Acciones</th></tr>`;
-            thead.innerHTML = headHtml;
-
-            filterTable();
-        }
-
-        function filterTable() {
-            if (!activeModuleKey) return;
-            const mod = MODULES[activeModuleKey];
-            const db = getDB();
-            const items = db[activeModuleKey] || [];
-            const query = (document.getElementById('module-search').value || '').toLowerCase();
-
-            const tbody = document.getElementById('table-body');
-            tbody.innerHTML = '';
-
-            const filtered = items.filter(item => {
-                return Object.values(item).some(val => String(val).toLowerCase().includes(query));
-            });
-
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="${mod.columns.length + 1}" class="text-center py-6 text-slate-500">No se encontraron registros.</td></tr>`;
-                return;
-            }
-
-            filtered.forEach(item => {
-                let tr = document.createElement('tr');
-                tr.className = "hover:bg-slate-900/50 transition";
-                let rowHtml = '';
-                mod.fields.forEach(field => {
-                    rowHtml += `<td class="px-4 py-3">${item[field.id] || '-'}</td>`;
-                });
-                rowHtml += `
-                    <td class="px-4 py-3 text-right space-x-2">
-                        <button onclick="openEditModal('${item.id}')" class="text-slate-400 hover:text-emerald-400 transition" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button onclick="promptDelete('${activeModuleKey}', '${item.id}')" class="text-slate-400 hover:text-rose-400 transition" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                `;
-                tr.innerHTML = rowHtml;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function openAddModal() {
-            document.getElementById('modalTitle').innerText = `Nuevo Registro - ${MODULES[activeModuleKey].title}`;
-            document.getElementById('recordId').value = '';
-            const fieldsContainer = document.getElementById('modalFields');
-            fieldsContainer.innerHTML = '';
-
-            MODULES[activeModuleKey].fields.forEach(field => {
-                fieldsContainer.innerHTML += `
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">${field.label}</label>
-                        <input type="${field.type}" id="field_${field.id}" ${field.required ? 'required' : ''} class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-brand-500">
-                    </div>
-                `;
-            });
-            document.getElementById('recordModal').classList.remove('hidden');
-        }
-
-        function openEditModal(id) {
-            const db = getDB();
-            const item = (db[activeModuleKey] || []).find(i => i.id === id);
-            if (!item) return;
-
-            document.getElementById('modalTitle').innerText = `Editar Registro - ${MODULES[activeModuleKey].title}`;
-            document.getElementById('recordId').value = id;
-            const fieldsContainer = document.getElementById('modalFields');
-            fieldsContainer.innerHTML = '';
-
-            MODULES[activeModuleKey].fields.forEach(field => {
-                fieldsContainer.innerHTML += `
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 mb-1">${field.label}</label>
-                        <input type="${field.type}" id="field_${field.id}" value="${item[field.id] || ''}" ${field.required ? 'required' : ''} class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-brand-500">
-                    </div>
-                `;
-            });
-            document.getElementById('recordModal').classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('recordModal').classList.add('hidden');
-        }
-
-        function saveRecord(e) {
-            e.preventDefault();
-            const id = document.getElementById('recordId').value;
-            const db = getDB();
-            if (!db[activeModuleKey]) db[activeModuleKey] = [];
-
-            let formData = { id: id || 'rec_' + Date.now() };
-            MODULES[activeModuleKey].fields.forEach(field => {
-                formData[field.id] = document.getElementById(`field_${field.id}`).value;
-            });
-
-            if (id) {
-                const idx = db[activeModuleKey].findIndex(i => i.id === id);
-                if (idx !== -1) db[activeModuleKey][idx] = formData;
-            } else {
-                db[activeModuleKey].push(formData);
-            }
-
-            saveDatabase(db);
-            closeModal();
-            renderModule(activeModuleKey);
-        }
-
-        function promptDelete(moduleKey, id) {
-            deleteTargetKey = moduleKey;
-            deleteTargetId = id;
-            document.getElementById('confirmModal').classList.remove('hidden');
-        }
-
-        function closeConfirmModal() {
-            deleteTargetKey = null;
-            deleteTargetId = null;
-            document.getElementById('confirmModal').classList.add('hidden');
-        }
-
-        document.getElementById('confirmDeleteBtn').onclick = function() {
-            if (deleteTargetKey && deleteTargetId) {
-                const db = getDB();
-                if (db[deleteTargetKey]) {
-                    db[deleteTargetKey] = db[deleteTargetKey].filter(i => i.id !== deleteTargetId);
-                    saveDatabase(db);
-                    renderModule(activeModuleKey);
-                }
-            }
-            closeConfirmModal();
-        };
-
-        function resetToDefaultData() {
-            saveDatabase(DEFAULT_DATA);
-            if (currentTab === 'dashboard') updateDashboard();
-            else renderModule(currentTab);
-        }
-
-        function exportDataJSON() {
-            const db = getDB();
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
-            const dlAnchor = document.createElement('a');
-            dlAnchor.setAttribute("href", dataStr);
-            dlAnchor.setAttribute("download", "hds_sga_sihoa_backup.json");
-            document.body.appendChild(dlAnchor);
-            dlAnchor.click();
-            dlAnchor.remove();
-        }
-
-        function importDataJSON(event) {
-            const fileReader = new FileReader();
-            if (event.target.files[0]) {
-                fileReader.readAsText(event.target.files[0], "UTF-8");
-                fileReader.onload = function(e) {
-                    try {
-                        const importedDB = JSON.parse(e.target.result);
-                        saveDatabase(importedDB);
-                        if (currentTab === 'dashboard') updateDashboard();
-                        else renderModule(currentTab);
-                        alert("Respaldo importado exitosamente.");
-                    } catch (err) {
-                        alert("Error al importar el archivo JSON.");
-                    }
-                };
-            }
-        }
-
-        // Initialize on load
-        window.onload = function() {
-            if (!localStorage.getItem('hds_sga_sihoa_db')) {
-                saveDatabase(DEFAULT_DATA);
-            }
+    // Inicializar por defecto en el dashboard
+    window.onload = function() {
+      switchTab('dashboard');
+    };
+  </script>
+</body>
+</html>
