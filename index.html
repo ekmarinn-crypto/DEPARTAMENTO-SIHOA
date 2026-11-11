@@ -3,826 +3,787 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HDS-SGA | Sistema Integral de Gestión</title>
+<title>HDS-SGA | Sistema Integral de Gestión HDS</title>
 <style>
-  :root{
-    --azul:#0b3d62;
-    --azul2:#12608c;
-    --verde:#12805c;
-    --gris:#f4f6f8;
-    --borde:#d9e2ea;
-    --texto:#22303a;
+  :root {
+    --azul: #0b4f6c;
+    --azul-claro: #e6f2f7;
+    --verde: #1b7f5a;
+    --rojo: #b3261e;
+    --amarillo: #f4b400;
+    --gris: #f4f6f8;
+    --borde: #d7dee4;
+    --texto: #1f2937;
   }
 
-  *{box-sizing:border-box}
+  * { box-sizing: border-box; }
 
-  body{
-    margin:0;
-    font-family:"Segoe UI",Arial,sans-serif;
-    background:var(--gris);
-    color:var(--texto);
+  body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--gris);
+    color: var(--texto);
   }
 
-  header{
-    background:linear-gradient(90deg,var(--azul),var(--azul2));
-    color:#fff;
-    padding:18px 24px;
+  header {
+    background: var(--azul);
+    color: white;
+    padding: 22px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
   }
 
-  header h1{margin:0;font-size:22px}
-  header p{margin:4px 0 0;opacity:.85;font-size:13px}
-
-  nav{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-    padding:12px 24px;
-    background:#fff;
-    border-bottom:1px solid var(--borde);
+  header h1 {
+    margin: 0;
+    font-size: 22px;
   }
 
-  nav button{
-    border:1px solid var(--borde);
-    background:#fff;
-    padding:9px 13px;
-    border-radius:8px;
-    cursor:pointer;
-    font-size:13px;
+  header p {
+    margin: 4px 0 0;
+    font-size: 13px;
+    opacity: .9;
   }
 
-  nav button:hover{
-    background:#eaf3f9;
-    border-color:var(--azul2);
+  .acciones-header button {
+    background: rgba(255,255,255,.15);
+    color: white;
+    border: 1px solid rgba(255,255,255,.35);
+    padding: 9px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
   }
 
-  main{
-    padding:22px;
-    max-width:1250px;
-    margin:auto;
+  .acciones-header button:hover {
+    background: rgba(255,255,255,.25);
   }
 
-  .tarjetas{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:14px;
-    margin-bottom:22px;
+  main {
+    max-width: 1200px;
+    margin: 24px auto;
+    padding: 0 18px;
   }
 
-  .tarjeta{
-    background:#fff;
-    border:1px solid var(--borde);
-    border-radius:12px;
-    padding:16px;
+  .panel {
+    background: white;
+    border: 1px solid var(--borde);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, .05);
   }
 
-  .tarjeta h3{
-    margin:0 0 6px;
-    font-size:14px;
-    color:var(--azul);
+  .panel h2 {
+    margin: 0 0 16px;
+    font-size: 18px;
+    color: var(--azul);
   }
 
-  .tarjeta .valor{
-    font-size:26px;
-    font-weight:700;
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 14px;
   }
 
-  .tarjeta small{color:#67757f}
-
-  section{
-    display:none;
-    background:#fff;
-    border:1px solid var(--borde);
-    border-radius:12px;
-    padding:18px;
-    margin-bottom:18px;
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 5px;
   }
 
-  section.activa{display:block}
-
-  .cabecera-seccion{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:12px;
-    flex-wrap:wrap;
+  input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    background: white;
   }
 
-  .cabecera-seccion h2{
-    margin:0;
-    font-size:18px;
-    color:var(--azul);
+  textarea {
+    min-height: 90px;
+    resize: vertical;
   }
 
-  .btn{
-    background:var(--verde);
-    color:#fff;
-    border:none;
-    padding:10px 14px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:600;
+  input:focus, select:focus, textarea:focus {
+    outline: 2px solid var(--azul);
+    outline-offset: 1px;
   }
 
-  .btn.secundario{
-    background:#fff;
-    color:var(--azul);
-    border:1px solid var(--borde);
+  .botones {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
   }
 
-  table{
-    width:100%;
-    border-collapse:collapse;
-    margin-top:14px;
-    font-size:13px;
+  button {
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 600;
   }
 
-  th,td{
-    border-bottom:1px solid var(--borde);
-    padding:9px;
-    text-align:left;
-    vertical-align:top;
+  .btn-primario { background: var(--azul); color: white; }
+  .btn-verde { background: var(--verde); color: white; }
+  .btn-rojo { background: var(--rojo); color: white; }
+  .btn-gris { background: #e5e7eb; color: #374151; }
+
+  .btn-primario:hover { background: #093d54; }
+  .btn-verde:hover { background: #14654a; }
+  .btn-rojo:hover { background: #8f1d17; }
+  .btn-gris:hover { background: #d1d5db; }
+
+  .filtros {
+    display: grid;
+    grid-template-columns: 2fr 1fr auto;
+    gap: 10px;
+    margin-bottom: 16px;
   }
 
-  th{
-    background:#eef4f8;
-    color:var(--azul);
+  .tabla-contenedor {
+    overflow-x: auto;
   }
 
-  .modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(10,25,40,.55);
-    padding:20px;
-    overflow:auto;
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
   }
 
-  .modal.abierto{
-    display:flex;
-    align-items:flex-start;
-    justify-content:center;
+  th, td {
+    padding: 11px 10px;
+    border-bottom: 1px solid var(--borde);
+    text-align: left;
+    vertical-align: top;
   }
 
-  .modal-contenido{
-    background:#fff;
-    width:min(760px,100%);
-    border-radius:12px;
-    padding:20px;
+  th {
+    background: var(--azul-claro);
+    color: var(--azul);
+    font-size: 12px;
+    text-transform: uppercase;
   }
 
-  .modal-contenido h3{
-    margin-top:0;
-    color:var(--azul);
+  .etiqueta {
+    display: inline-block;
+    padding: 4px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
   }
 
-  .campos{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:12px;
+  .bajo { background: #dcfce7; color: #166534; }
+  .medio { background: #fef3c7; color: #92400e; }
+  .alto { background: #fee2e2; color: #991b1b; }
+
+  .acciones-tabla {
+    display: flex;
+    gap: 6px;
   }
 
-  label{
-    display:block;
-    font-size:12px;
-    font-weight:600;
-    margin-bottom:5px;
+  .acciones-tabla button {
+    padding: 6px 10px;
+    font-size: 12px;
   }
 
-  input,select,textarea{
-    width:100%;
-    padding:9px;
-    border:1px solid var(--borde);
-    border-radius:7px;
-    font-family:inherit;
+  .mensaje {
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    font-size: 14px;
+    display: none;
   }
 
-  textarea{
-    min-height:75px;
-    resize:vertical;
+  .mensaje.ok {
+    display: block;
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #86efac;
   }
 
-  .acciones{
-    display:flex;
-    justify-content:flex-end;
-    gap:10px;
-    margin-top:16px;
+  .mensaje.error {
+    display: block;
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
   }
 
-  .vacio{
-    color:#67757f;
-    font-style:italic;
-    padding:12px 0;
+  .resumen {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
   }
 
-  .herramientas{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-bottom:14px;
+  .tarjeta {
+    background: white;
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    padding: 16px;
+  }
+
+  .tarjeta strong {
+    display: block;
+    font-size: 26px;
+    color: var(--azul);
+  }
+
+  .tarjeta span {
+    font-size: 13px;
+    color: #6b7280;
+  }
+
+  .seccion-hds {
+    border-left: 4px solid var(--azul);
+    padding-left: 12px;
+    margin-bottom: 18px;
+  }
+
+  .seccion-hds h3 {
+    margin: 0 0 10px;
+    font-size: 15px;
+    color: var(--azul);
+  }
+
+  .oculto { display: none; }
+
+  .modal-fondo {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, .55);
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 30px 15px;
+    overflow-y: auto;
+    z-index: 100;
+  }
+
+  .modal-fondo.visible {
+    display: flex;
+  }
+
+  .modal {
+    background: white;
+    width: 100%;
+    max-width: 900px;
+    border-radius: 12px;
+    padding: 22px;
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .modal-header h3 {
+    margin: 0;
+    color: var(--azul);
+  }
+
+  .cerrar {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #6b7280;
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  @media (max-width: 700px) {
+    .filtros {
+      grid-template-columns: 1fr;
+    }
+
+    header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
   }
 </style>
 </head>
-
 <body>
 
 <header>
-  <h1>HDS-SGA | Sistema Integral de Gestión</h1>
-  <p>Gestión ambiental, seguridad, higiene y ambiente — SIHO-A</p>
+  <div>
+    <h1>HDS-SGA | Sistema Integral de Gestión HDS</h1>
+    <p>Control de hojas de datos de seguridad y comunicación de peligros químicos</p>
+  </div>
+  <div class="acciones-header">
+    <button onclick="exportarJSON()">Exportar datos</button>
+    <button onclick="document.getElementById('archivoImportar').click()">Importar datos</button>
+    <input type="file" id="archivoImportar" accept=".json" class="oculto" onchange="importarJSON(event)">
+  </div>
 </header>
 
-<nav>
-  <button data-seccion="panel">Panel principal</button>
-  <button data-seccion="charlas">Charlas SIHO-A</button>
-  <button data-seccion="vacaciones">Vacaciones</button>
-  <button data-seccion="simulacros">Simulacros</button>
-  <button data-seccion="incidentes">Incidentes y accidentes</button>
-  <button data-seccion="delegados">Delegados de prevención</button>
-  <button data-seccion="comite">Comité SSST</button>
-  <button data-seccion="epidemiologia">Vigilancia epidemiológica</button>
-  <button data-seccion="pozos">Pozos terminados</button>
-  <button data-seccion="desechos">Desechos</button>
-  <button data-seccion="inspecciones">Inspecciones RACDA</button>
-  <button data-seccion="respaldo">Respaldo y reportes</button>
-</nav>
-
 <main>
-  <section id="panel" class="activa">
-    <div class="cabecera-seccion">
-      <h2>Panel principal de indicadores</h2>
+  <section class="resumen">
+    <div class="tarjeta">
+      <strong id="totalProductos">0</strong>
+      <span>Productos registrados</span>
     </div>
+    <div class="tarjeta">
+      <strong id="totalPeligrosos">0</strong>
+      <span>Productos peligrosos</span>
+    </div>
+    <div class="tarjeta">
+      <strong id="totalRevision">0</strong>
+      <span>Revisión requerida</span>
+    </div>
+  </section>
 
-    <div class="tarjetas">
-      <div class="tarjeta">
-        <h3>Charlas de capacitación</h3>
-        <div class="valor" id="kpiCharlas">0</div>
-        <small>sesiones registradas</small>
+  <section class="panel">
+    <h2 id="tituloFormulario">Registrar producto químico</h2>
+    <div id="mensaje" class="mensaje"></div>
+
+    <form id="formProducto">
+      <div class="grid">
+        <div>
+          <label for="nombre">Nombre comercial *</label>
+          <input type="text" id="nombre" required placeholder="Ejemplo: Solvente industrial">
+        </div>
+        <div>
+          <label for="fabricante">Fabricante o proveedor *</label>
+          <input type="text" id="fabricante" required placeholder="Ejemplo: Química Andina S.A.">
+        </div>
+        <div>
+          <label for="codigo">Código interno</label>
+          <input type="text" id="codigo" placeholder="Ejemplo: QUI-001">
+        </div>
+        <div>
+          <label for="cas">Número CAS</label>
+          <input type="text" id="cas" placeholder="Ejemplo: 67-64-1">
+        </div>
+        <div>
+          <label for="estadoFisico">Estado físico</label>
+          <select id="estadoFisico">
+            <option value="Líquido">Líquido</option>
+            <option value="Sólido">Sólido</option>
+            <option value="Gas">Gas</option>
+            <option value="Aerosol">Aerosol</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div>
+        <div>
+          <label for="peligro">Nivel de peligro</label>
+          <select id="peligro">
+            <option value="Bajo">Bajo</option>
+            <option value="Medio">Medio</option>
+            <option value="Alto">Alto</option>
+          </select>
+        </div>
+        <div>
+          <label for="fechaRevision">Fecha de revisión HDS</label>
+          <input type="date" id="fechaRevision">
+        </div>
+        <div>
+          <label for="responsable">Responsable</label>
+          <input type="text" id="responsable" placeholder="Nombre del responsable">
+        </div>
       </div>
 
-      <div class="tarjeta">
-        <h3>Simulacros ejecutados</h3>
-        <div class="valor" id="kpiSimulacros">0</div>
-        <small>ejercicios de respuesta</small>
+      <div class="seccion-hds" style="margin-top:18px;">
+        <h3>Identificación de peligros</h3>
+        <div class="grid">
+          <div>
+            <label for="pictogramas">Pictogramas SGA</label>
+            <select id="pictogramas" multiple size="5">
+              <option value="Inflamable">Inflamable</option>
+              <option value="Corrosivo">Corrosivo</option>
+              <option value="Tóxico">Tóxico</option>
+              <option value="Irritante">Irritante</option>
+              <option value="Peligro ambiental">Peligro ambiental</option>
+              <option value="Presión de gas">Presión de gas</option>
+              <option value="Explosivo">Explosivo</option>
+            </select>
+          </div>
+          <div>
+            <label for="frasesPeligro">Frases H / peligros</label>
+            <textarea id="frasesPeligro" placeholder="Ejemplo: H225 Líquido y vapores muy inflamables"></textarea>
+          </div>
+          <div>
+            <label for="frasesPrecaucion">Frases P / precaución</label>
+            <textarea id="frasesPrecaucion" placeholder="Ejemplo: P210 Mantener alejado de fuentes de calor"></textarea>
+          </div>
+        </div>
       </div>
 
-      <div class="tarjeta">
-        <h3>Incidentes y accidentes</h3>
-        <div class="valor" id="kpiIncidentes">0</div>
-        <small>reportes registrados</small>
+      <div class="seccion-hds">
+        <h3>Manejo, almacenamiento y emergencias</h3>
+        <div class="grid">
+          <div>
+            <label for="primerosAuxilios">Primeros auxilios</label>
+            <textarea id="primerosAuxilios" placeholder="Medidas ante inhalación, contacto con piel, ojos o ingestión"></textarea>
+          </div>
+          <div>
+            <label for="almacenamiento">Almacenamiento</label>
+            <textarea id="almacenamiento" placeholder="Condiciones de almacenamiento seguro"></textarea>
+          </div>
+          <div>
+            <label for="epp">Equipo de protección personal</label>
+            <textarea id="epp" placeholder="Guantes, gafas, respirador, ropa de protección, etc."></textarea>
+          </div>
+        </div>
       </div>
 
-      <div class="tarjeta">
-        <h3>Pozos con dossier</h3>
-        <div class="valor" id="kpiPozos">0</div>
-        <small>PEA / PDVSA MA-01-02-12</small>
+      <div class="botones">
+        <button type="submit" class="btn-primario" id="btnGuardar">Guardar producto</button>
+        <button type="button" class="btn-gris" onclick="limpiarFormulario()">Limpiar</button>
       </div>
-    </div>
-
-    <p>
-      El sistema permite registrar y consultar la gestión de seguridad, higiene,
-      ambiente, salud ocupacional y cumplimiento normativo en operaciones de pozos.
-    </p>
+    </form>
   </section>
 
-  <section id="charlas">
-    <div class="cabecera-seccion">
-      <h2>Registro de charlas SIHO-A y de seguridad</h2>
-      <button class="btn" onclick="abrirModal('charlas')">Nueva charla</button>
-    </div>
-    <div id="tablaCharlas"></div>
-  </section>
+  <section class="panel">
+    <h2>Inventario de productos químicos</h2>
 
-  <section id="vacaciones">
-    <div class="cabecera-seccion">
-      <h2>Planificación y control de vacaciones</h2>
-      <button class="btn" onclick="abrirModal('vacaciones')">Registrar vacación</button>
-    </div>
-    <div id="tablaVacaciones"></div>
-  </section>
-
-  <section id="simulacros">
-    <div class="cabecera-seccion">
-      <h2>Programa y ejecución de simulacros</h2>
-      <button class="btn" onclick="abrirModal('simulacros')">Registrar simulacro</button>
-    </div>
-    <div id="tablaSimulacros"></div>
-  </section>
-
-  <section id="incidentes">
-    <div class="cabecera-seccion">
-      <h2>Registro de incidentes y accidentes laborales</h2>
-      <button class="btn" onclick="abrirModal('incidentes')">Registrar incidente</button>
-    </div>
-    <div id="tablaIncidentes"></div>
-  </section>
-
-  <section id="delegados">
-    <div class="cabecera-seccion">
-      <h2>Informe de delegados de prevención</h2>
-      <button class="btn" onclick="abrirModal('delegados')">Registrar informe</button>
-    </div>
-    <div id="tablaDelegados"></div>
-  </section>
-
-  <section id="comite">
-    <div class="cabecera-seccion">
-      <h2>Informe del Comité de Seguridad y Salud en el Trabajo</h2>
-      <button class="btn" onclick="abrirModal('comite')">Registrar acta</button>
-    </div>
-    <div id="tablaComite"></div>
-  </section>
-
-  <section id="epidemiologia">
-    <div class="cabecera-seccion">
-      <h2>Vigilancia epidemiológica y salud ocupacional</h2>
-      <button class="btn" onclick="abrirModal('epidemiologia')">Registrar evaluación</button>
-    </div>
-    <div id="tablaEpidemiologia"></div>
-  </section>
-
-  <section id="pozos">
-    <div class="cabecera-seccion">
-      <h2>Informes ambientales y dossiers por pozo terminado</h2>
-      <button class="btn" onclick="abrirModal('pozos')">Nuevo dossier</button>
-    </div>
-    <div id="tablaPozos"></div>
-  </section>
-
-  <section id="desechos">
-    <div class="cabecera-seccion">
-      <h2>Control de desechos generados</h2>
-      <button class="btn" onclick="abrirModal('desechos')">Registrar desecho</button>
-    </div>
-    <div id="tablaDesechos"></div>
-  </section>
-
-  <section id="inspecciones">
-    <div class="cabecera-seccion">
-      <h2>Control de inspecciones y RACDA</h2>
-      <button class="btn" onclick="abrirModal('inspecciones')">Nueva inspección</button>
-    </div>
-    <div id="tablaInspecciones"></div>
-  </section>
-
-  <section id="respaldo">
-    <div class="cabecera-seccion">
-      <h2>Exportar, respaldar y sincronizar</h2>
+    <div class="filtros">
+      <input type="text" id="busqueda" placeholder="Buscar por nombre, fabricante, código o CAS" oninput="renderTabla()">
+      <select id="filtroPeligro" onchange="renderTabla()">
+        <option value="">Todos los niveles</option>
+        <option value="Bajo">Bajo</option>
+        <option value="Medio">Medio</option>
+        <option value="Alto">Alto</option>
+      </select>
+      <button type="button" class="btn-gris" onclick="limpiarFiltros()">Limpiar filtros</button>
     </div>
 
-    <div class="herramientas">
-      <button class="btn" onclick="exportarJSON()">Descargar respaldo JSON</button>
-
-      <label class="btn secundario" for="importarJSON">
-        Cargar respaldo JSON
-      </label>
-
-      <input
-        type="file"
-        id="importarJSON"
-        accept=".json"
-        hidden
-        onchange="importarJSON(event)"
-      >
+    <div class="tabla-contenedor">
+      <table>
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th>Fabricante</th>
+            <th>CAS</th>
+            <th>Peligro</th>
+            <th>Revisión</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpoTabla"></tbody>
+      </table>
     </div>
-
-    <p>
-      Los registros se guardan localmente en el navegador. Usa el respaldo JSON
-      para compartir o sincronizar la información entre computadoras.
-    </p>
   </section>
 </main>
 
-<div class="modal" id="modal">
-  <div class="modal-contenido">
-    <h3 id="modalTitulo">Registrar</h3>
-    <div id="modalCampos" class="campos"></div>
-
-    <div class="acciones">
-      <button class="btn secundario" onclick="cerrarModal()">Cancelar</button>
-      <button class="btn" onclick="guardarRegistro()">Guardar</button>
+<div class="modal-fondo" id="modalVer">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Hoja de Datos de Seguridad</h3>
+      <button class="cerrar" onclick="cerrarModal()">&times;</button>
     </div>
+    <div id="contenidoHDS"></div>
   </div>
 </div>
 
+<footer>
+  HDS-SGA | Sistema Integral de Gestión HDS — Los datos se almacenan localmente en este navegador.
+</footer>
+
 <script>
-const MODULOS = {
-  charlas:{
-    titulo:"Registrar charla ambiental",
-    campos:[
-      "fecha|date",
-      "tema|text",
-      "departamento|text",
-      "expositor|text",
-      "asistentes|number"
-    ],
-    columnas:["fecha","tema","departamento","expositor","asistentes"]
-  },
+const CLAVE = "hds_sga_productos";
+let productos = cargarDatos();
+let idEdicion = null;
 
-  vacaciones:{
-    titulo:"Registrar vacaciones SIHO-A",
-    campos:[
-      "funcionario|text",
-      "cargo|text",
-      "inicio|date",
-      "reincorporacion|date",
-      "coordinadorSuplente|text",
-      "relevo|text",
-      "estatus|text"
-    ],
-    columnas:[
-      "funcionario",
-      "cargo",
-      "inicio",
-      "reincorporacion",
-      "coordinadorSuplente",
-      "relevo",
-      "estatus"
-    ]
-  },
-
-  simulacros:{
-    titulo:"Registrar simulacro SIHO-A",
-    campos:[
-      "fecha|date",
-      "tipoEscenario|text",
-      "ubicacion|text",
-      "area|text",
-      "tiempoRespuesta|number",
-      "observador|text",
-      "evaluador|text"
-    ],
-    columnas:[
-      "fecha",
-      "tipoEscenario",
-      "ubicacion",
-      "area",
-      "tiempoRespuesta",
-      "observador",
-      "evaluador"
-    ]
-  },
-
-  incidentes:{
-    titulo:"Registrar incidente o accidente",
-    campos:[
-      "fecha|date",
-      "descripcion|textarea",
-      "clasificacion|select:Incidente operativo,Accidente leve,Accidente incapacitante",
-      "diasPerdidos|number",
-      "accionCorrectiva|textarea"
-    ],
-    columnas:[
-      "fecha",
-      "descripcion",
-      "clasificacion",
-      "diasPerdidos",
-      "accionCorrectiva"
-    ]
-  },
-
-  delegados:{
-    titulo:"Registrar informe de delegado",
-    campos:[
-      "fecha|date",
-      "delegado|text",
-      "responsable|text",
-      "areaVerificada|text",
-      "hallazgos|textarea",
-      "propuestas|textarea",
-      "estatus|text"
-    ],
-    columnas:[
-      "fecha",
-      "delegado",
-      "responsable",
-      "areaVerificada",
-      "hallazgos",
-      "propuestas",
-      "estatus"
-    ]
-  },
-
-  comite:{
-    titulo:"Registrar acta del Comité SSST",
-    campos:[
-      "numeroActa|text",
-      "fecha|date",
-      "temas|textarea",
-      "asistentes|text",
-      "miembros|text",
-      "acuerdos|textarea"
-    ],
-    columnas:[
-      "numeroActa",
-      "fecha",
-      "temas",
-      "asistentes",
-      "miembros",
-      "acuerdos"
-    ]
-  },
-
-  epidemiologia:{
-    titulo:"Registrar vigilancia epidemiológica",
-    campos:[
-      "periodo|text",
-      "fecha|date",
-      "tipoExamen|text",
-      "jornada|text",
-      "personalEvaluado|text",
-      "hallazgos|textarea",
-      "aptitud|text"
-    ],
-    columnas:[
-      "periodo",
-      "fecha",
-      "tipoExamen",
-      "jornada",
-      "personalEvaluado",
-      "hallazgos",
-      "aptitud"
-    ]
-  },
-
-  pozos:{
-    titulo:"Registrar dossier por pozo terminado",
-    campos:[
-      "pozo|text",
-      "proyecto|text",
-      "distrito|text",
-      "ubicacion|text",
-      "normaPEA|text",
-      "residuosGenerados|text",
-      "racda|text",
-      "estatusCierre|text"
-    ],
-    columnas:[
-      "pozo",
-      "proyecto",
-      "distrito",
-      "ubicacion",
-      "normaPEA",
-      "residuosGenerados",
-      "racda",
-      "estatusCierre"
-    ]
-  },
-
-  desechos:{
-    titulo:"Registrar generación de desechos",
-    campos:[
-      "fecha|date",
-      "clasificacion|select:Desecho peligroso,Desecho doméstico no peligroso",
-      "cantidadKg|number",
-      "descripcionMaterial|text",
-      "areaOrigen|text",
-      "empresaGestora|text",
-      "destino|text"
-    ],
-    columnas:[
-      "fecha",
-      "clasificacion",
-      "cantidadKg",
-      "descripcionMaterial",
-      "areaOrigen",
-      "empresaGestora",
-      "destino"
-    ]
-  },
-
-  inspecciones:{
-    titulo:"Registrar inspección RACDA",
-    campos:[
-      "fecha|date",
-      "norma|text",
-      "entidad|text",
-      "area|text",
-      "pozo|text",
-      "inspector|text",
-      "hallazgos|textarea",
-      "estatus|text"
-    ],
-    columnas:[
-      "fecha",
-      "norma",
-      "entidad",
-      "area",
-      "pozo",
-      "inspector",
-      "hallazgos",
-      "estatus"
-    ]
+function cargarDatos() {
+  try {
+    return JSON.parse(localStorage.getItem(CLAVE)) || [];
+  } catch {
+    return [];
   }
-};
+}
 
-const claves = Object.keys(MODULOS);
-let moduloActual = "";
-let datos = cargarDatos();
+function guardarDatos() {
+  localStorage.setItem(CLAVE, JSON.stringify(productos));
+}
 
-document.querySelectorAll("nav button").forEach(b=>{
-  b.addEventListener("click",()=>{
-    mostrarSeccion(b.dataset.seccion);
-  });
+function mostrarMensaje(texto, tipo) {
+  const mensaje = document.getElementById("mensaje");
+  mensaje.textContent = texto;
+  mensaje.className = "mensaje " + tipo;
+  setTimeout(() => {
+    mensaje.className = "mensaje";
+    mensaje.textContent = "";
+  }, 3500);
+}
+
+function obtenerValor(id) {
+  return document.getElementById(id).value.trim();
+}
+
+function obtenerPictogramas() {
+  return Array.from(document.getElementById("pictogramas").selectedOptions)
+    .map(opcion => opcion.value);
+}
+
+document.getElementById("formProducto").addEventListener("submit", function(evento) {
+  evento.preventDefault();
+
+  const producto = {
+    id: idEdicion || Date.now().toString(),
+    nombre: obtenerValor("nombre"),
+    fabricante: obtenerValor("fabricante"),
+    codigo: obtenerValor("codigo"),
+    cas: obtenerValor("cas"),
+    estadoFisico: obtenerValor("estadoFisico"),
+    peligro: obtenerValor("peligro"),
+    fechaRevision: obtenerValor("fechaRevision"),
+    responsable: obtenerValor("responsable"),
+    pictogramas: obtenerPictogramas(),
+    frasesPeligro: obtenerValor("frasesPeligro"),
+    frasesPrecaucion: obtenerValor("frasesPrecaucion"),
+    primerosAuxilios: obtenerValor("primerosAuxilios"),
+    almacenamiento: obtenerValor("almacenamiento"),
+    epp: obtenerValor("epp"),
+    fechaCreacion: new Date().toISOString()
+  };
+
+  if (idEdicion) {
+    const indice = productos.findIndex(p => p.id === idEdicion);
+    producto.fechaCreacion = productos[indice].fechaCreacion;
+    productos[indice] = producto;
+    mostrarMensaje("Producto actualizado correctamente.", "ok");
+  } else {
+    productos.push(producto);
+    mostrarMensaje("Producto registrado correctamente.", "ok");
+  }
+
+  guardarDatos();
+  limpiarFormulario();
+  renderTabla();
+  actualizarResumen();
 });
 
-function cargarDatos(){
-  try{
-    return JSON.parse(localStorage.getItem("hds_sga_datos")) || {};
-  }catch(error){
-    return {};
-  }
-}
+function renderTabla() {
+  const busqueda = obtenerValor("busqueda").toLowerCase();
+  const filtro = obtenerValor("filtroPeligro");
+  const cuerpo = document.getElementById("cuerpoTabla");
 
-function guardarDatos(){
-  localStorage.setItem("hds_sga_datos",JSON.stringify(datos));
-  renderizarTodo();
-}
+  const filtrados = productos.filter(p => {
+    const coincideTexto = [
+      p.nombre, p.fabricante, p.codigo, p.cas
+    ].join(" ").toLowerCase().includes(busqueda);
 
-function mostrarSeccion(id){
-  document.querySelectorAll("section").forEach(s=>{
-    s.classList.remove("activa");
+    const coincidePeligro = !filtro || p.peligro === filtro;
+    return coincideTexto && coincidePeligro;
   });
 
-  document.getElementById(id).classList.add("activa");
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-}
-
-function abrirModal(modulo){
-  moduloActual = modulo;
-
-  const config = MODULOS[modulo];
-
-  document.getElementById("modalTitulo").textContent = config.titulo;
-
-  document.getElementById("modalCampos").innerHTML = config.campos.map(campo=>{
-    const partes = campo.split("|");
-    const nombre = partes[0];
-    const tipo = partes[1];
-
-    const etiqueta = nombre
-      .replace(/([A-Z])/g," $1")
-      .replace(/^./,letra=>letra.toUpperCase());
-
-    if(tipo.startsWith("select:")){
-      const opciones = tipo
-        .split(":")[1]
-        .split(",")
-        .map(opcion=>`<option>${opcion}</option>`)
-        .join("");
-
-      return `
-        <div>
-          <label>${etiqueta}</label>
-          <select name="${nombre}">${opciones}</select>
-        </div>
-      `;
-    }
-
-    if(tipo === "textarea"){
-      return `
-        <div>
-          <label>${etiqueta}</label>
-          <textarea name="${nombre}"></textarea>
-        </div>
-      `;
-    }
-
-    return `
-      <div>
-        <label>${etiqueta}</label>
-        <input type="${tipo}" name="${nombre}">
-      </div>
-    `;
-  }).join("");
-
-  document.getElementById("modal").classList.add("abierto");
-}
-
-function cerrarModal(){
-  document.getElementById("modal").classList.remove("abierto");
-  document.getElementById("modalCampos").innerHTML = "";
-}
-
-function guardarRegistro(){
-  const config = MODULOS[moduloActual];
-  const registro = {};
-
-  config.campos.forEach(campo=>{
-    const nombre = campo.split("|")[0];
-    registro[nombre] = document
-      .querySelector(`[name="${nombre}"]`)
-      .value
-      .trim();
-  });
-
-  if(!datos[moduloActual]){
-    datos[moduloActual] = [];
-  }
-
-  datos[moduloActual].unshift(registro);
-  guardarDatos();
-  cerrarModal();
-}
-
-function crearTabla(modulo,registros){
-  const config = MODULOS[modulo];
-
-  if(!registros || registros.length === 0){
-    return `<p class="vacio">No hay registros disponibles.</p>`;
-  }
-
-  const encabezados = config.columnas.map(columna=>{
-    const texto = columna
-      .replace(/([A-Z])/g," $1")
-      .replace(/^./,letra=>letra.toUpperCase());
-
-    return `<th>${texto}</th>`;
-  }).join("");
-
-  const filas = registros.map(registro=>{
-    return `<tr>${
-      config.columnas.map(columna=>{
-        return `<td>${registro[columna] || "—"}</td>`;
-      }).join("")
-    }</tr>`;
-  }).join("");
-
-  return `
-    <table>
-      <thead>
-        <tr>${encabezados}</tr>
-      </thead>
-      <tbody>
-        ${filas}
-      </tbody>
-    </table>
-  `;
-}
-
-function renderizarTodo(){
-  claves.forEach(clave=>{
-    const id = "tabla" + clave.charAt(0).toUpperCase() + clave.slice(1);
-    const contenedor = document.getElementById(id);
-
-    if(contenedor){
-      contenedor.innerHTML = crearTabla(clave,datos[clave]);
-    }
-  });
-
-  document.getElementById("kpiCharlas").textContent =
-    (datos.charlas || []).length;
-
-  document.getElementById("kpiSimulacros").textContent =
-    (datos.simulacros || []).length;
-
-  document.getElementById("kpiIncidentes").textContent =
-    (datos.incidentes || []).length;
-
-  document.getElementById("kpiPozos").textContent =
-    (datos.pozos || []).length;
-}
-
-function exportarJSON(){
-  const contenido = JSON.stringify(datos,null,2);
-  const blob = new Blob([contenido],{type:"application/json"});
-  const enlace = document.createElement("a");
-
-  enlace.href = URL.createObjectURL(blob);
-  enlace.download = "respaldo_hds_sga.json";
-  enlace.click();
-}
-
-function importarJSON(evento){
-  const archivo = evento.target.files[0];
-
-  if(!archivo){
+  if (filtrados.length === 0) {
+    cuerpo.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align:center; padding:25px; color:#6b7280;">
+          No hay productos que coincidan con la búsqueda.
+        </td>
+      </tr>`;
     return;
   }
 
-  const lector = new FileReader();
+  cuerpo.innerHTML = filtrados.map(p => `
+    <tr>
+      <td>
+        <strong>${escapar(p.nombre)}</strong><br>
+        <small>${escapar(p.codigo || "Sin código")}</small>
+      </td>
+      <td>${escapar(p.fabricante)}</td>
+      <td>${escapar(p.cas || "—")}</td>
+      <td><span class="etiqueta ${p.peligro.toLowerCase()}">${p.peligro}</span></td>
+      <td>${p.fechaRevision || "—"}</td>
+      <td>
+        <div class="acciones-tabla">
+          <button class="btn-verde" onclick="verHDS('${p.id}')">Ver HDS</button>
+          <button class="btn-gris" onclick="editarProducto('${p.id}')">Editar</button>
+          <button class="btn-rojo" onclick="eliminarProducto('${p.id}')">Eliminar</button>
+        </div>
+      </td>
+    </tr>
+  `).join("");
+}
 
-  lector.onload = eventoLectura=>{
-    try{
-      datos = JSON.parse(eventoLectura.target.result);
+function escapar(texto) {
+  return String(texto ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function actualizarResumen() {
+  const hoy = new Date().toISOString().slice(0, 10);
+  const limite = new Date();
+  limite.setFullYear(limite.getFullYear() - 1);
+
+  document.getElementById("totalProductos").textContent = productos.length;
+  document.getElementById("totalPeligrosos").textContent =
+    productos.filter(p => p.peligro === "Alto" || p.peligro === "Medio").length;
+  document.getElementById("totalRevision").textContent =
+    productos.filter(p => p.fechaRevision && new Date(p.fechaRevision) < limite).length;
+}
+
+function editarProducto(id) {
+  const producto = productos.find(p => p.id === id);
+  if (!producto) return;
+
+  idEdicion = id;
+  document.getElementById("tituloFormulario").textContent = "Editar producto químico";
+  document.getElementById("btnGuardar").textContent = "Actualizar producto";
+
+  document.getElementById("nombre").value = producto.nombre;
+  document.getElementById("fabricante").value = producto.fabricante;
+  document.getElementById("codigo").value = producto.codigo;
+  document.getElementById("cas").value = producto.cas;
+  document.getElementById("estadoFisico").value = producto.estadoFisico;
+  document.getElementById("peligro").value = producto.peligro;
+  document.getElementById("fechaRevision").value = producto.fechaRevision;
+  document.getElementById("responsable").value = producto.responsable;
+  document.getElementById("frasesPeligro").value = producto.frasesPeligro;
+  document.getElementById("frasesPrecaucion").value = producto.frasesPrecaucion;
+  document.getElementById("primerosAuxilios").value = producto.primerosAuxilios;
+  document.getElementById("almacenamiento").value = producto.almacenamiento;
+  document.getElementById("epp").value = producto.epp;
+
+  const seleccion = document.getElementById("pictogramas");
+  Array.from(seleccion.options).forEach(opcion => {
+    opcion.selected = producto.pictogramas.includes(opcion.value);
+  });
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function eliminarProducto(id) {
+  const producto = productos.find(p => p.id === id);
+  if (!producto) return;
+
+  const confirmar = confirm(`¿Eliminar el producto "${producto.nombre}"?`);
+  if (!confirmar) return;
+
+  productos = productos.filter(p => p.id !== id);
+  guardarDatos();
+  renderTabla();
+  actualizarResumen();
+  mostrarMensaje("Producto eliminado.", "ok");
+}
+
+function verHDS(id) {
+  const p = productos.find(x => x.id === id);
+  if (!p) return;
+
+  document.getElementById("contenidoHDS").innerHTML = `
+    <div class="seccion-hds">
+      <h3>1. Identificación del producto</h3>
+      <p><strong>Nombre:</strong> ${escapar(p.nombre)}</p>
+      <p><strong>Fabricante:</strong> ${escapar(p.fabricante)}</p>
+      <p><strong>Código interno:</strong> ${escapar(p.codigo || "—")}</p>
+      <p><strong>Número CAS:</strong> ${escapar(p.cas || "—")}</p>
+      <p><strong>Estado físico:</strong> ${escapar(p.estadoFisico)}</p>
+      <p><strong>Responsable:</strong> ${escapar(p.responsable || "—")}</p>
+    </div>
+
+    <div class="seccion-hds">
+      <h3>2. Identificación de peligros</h3>
+      <p><strong>Nivel de peligro:</strong> ${escapar(p.peligro)}</p>
+      <p><strong>Pictogramas SGA:</strong> ${p.pictogramas.length ? escapar(p.pictogramas.join(", ")) : "No especificados"}</p>
+      <p><strong>Frases H:</strong> ${escapar(p.frasesPeligro || "No especificadas")}</p>
+      <p><strong>Frases P:</strong> ${escapar(p.frasesPrecaucion || "No especificadas")}</p>
+    </div>
+
+    <div class="seccion-hds">
+      <h3>3. Primeros auxilios</h3>
+      <p>${escapar(p.primerosAuxilios || "No especificado")}</p>
+    </div>
+
+    <div class="seccion-hds">
+      <h3>4. Manejo y almacenamiento</h3>
+      <p><strong>Almacenamiento:</strong> ${escapar(p.almacenamiento || "No especificado")}</p>
+      <p><strong>EPP:</strong> ${escapar(p.epp || "No especificado")}</p>
+    </div>
+
+    <div class="seccion-hds">
+      <h3>5. Control documental</h3>
+      <p><strong>Fecha de revisión HDS:</strong> ${escapar(p.fechaRevision || "—")}</p>
+      <p><strong>Fecha de registro:</strong> ${new Date(p.fechaCreacion).toLocaleString()}</p>
+    </div>
+  `;
+
+  document.getElementById("modalVer").classList.add("visible");
+}
+
+function cerrarModal() {
+  document.getElementById("modalVer").classList.remove("visible");
+}
+
+function limpiarFormulario() {
+  document.getElementById("formProducto").reset();
+  idEdicion = null;
+  document.getElementById("tituloFormulario").textContent = "Registrar producto químico";
+  document.getElementById("btnGuardar").textContent = "Guardar producto";
+}
+
+function limpiarFiltros() {
+  document.getElementById("busqueda").value = "";
+  document.getElementById("filtroPeligro").value = "";
+  renderTabla();
+}
+
+function exportarJSON() {
+  if (productos.length === 0) {
+    alert("No hay productos registrados para exportar.");
+    return;
+  }
+
+  const contenido = JSON.stringify(productos, null, 2);
+  const blob = new Blob([contenido], { type: "application/json" });
+  const enlace = document.createElement("a");
+  enlace.href = URL.createObjectURL(blob);
+  enlace.download = "hds_sga_productos.json";
+  enlace.click();
+  URL.revokeObjectURL(enlace.href);
+}
+
+function importarJSON(evento) {
+  const archivo = evento.target.files[0];
+  if (!archivo) return;
+
+  const lector = new FileReader();
+  lector.onload = function() {
+    try {
+      const datos = JSON.parse(lector.result);
+      if (!Array.isArray(datos)) throw new Error("Formato inválido");
+
+      productos = datos;
       guardarDatos();
-      alert("Respaldo cargado correctamente.");
-    }catch(error){
-      alert("El archivo JSON no es válido.");
+      renderTabla();
+      actualizarResumen();
+      mostrarMensaje("Datos importados correctamente.", "ok");
+    } catch {
+      mostrarMensaje("El archivo seleccionado no es válido.", "error");
     }
   };
 
   lector.readAsText(archivo);
+  evento.target.value = "";
 }
 
-document.getElementById("modal").addEventListener("click",evento=>{
-  if(evento.target.id === "modal"){
-    cerrarModal();
-  }
+document.addEventListener("keydown", function(evento) {
+  if (evento.key === "Escape") cerrarModal();
 });
 
-renderizarTodo();
+renderTabla();
+actualizarResumen();
 </script>
 
 </body>
