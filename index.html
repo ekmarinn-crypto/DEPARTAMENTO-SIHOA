@@ -6,45 +6,223 @@
 <title>HDS-SGA | Sistema Integral de Gestión</title>
 <style>
   :root{
-    --azul:#0b3d62; --azul2:#12608c; --verde:#12805c;
-    --gris:#f4f6f8; --borde:#d9e2ea; --texto:#22303a;
+    --azul:#0b3d62;
+    --azul2:#12608c;
+    --verde:#12805c;
+    --gris:#f4f6f8;
+    --borde:#d9e2ea;
+    --texto:#22303a;
   }
+
   *{box-sizing:border-box}
-  body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:var(--gris);color:var(--texto)}
-  header{background:linear-gradient(90deg,var(--azul),var(--azul2));color:#fff;padding:18px 24px}
+
+  body{
+    margin:0;
+    font-family:"Segoe UI",Arial,sans-serif;
+    background:var(--gris);
+    color:var(--texto);
+  }
+
+  header{
+    background:linear-gradient(90deg,var(--azul),var(--azul2));
+    color:#fff;
+    padding:18px 24px;
+  }
+
   header h1{margin:0;font-size:22px}
   header p{margin:4px 0 0;opacity:.85;font-size:13px}
-  nav{display:flex;gap:8px;flex-wrap:wrap;padding:12px 24px;background:#fff;border-bottom:1px solid var(--borde)}
-  nav button{border:1px solid var(--borde);background:#fff;padding:9px 13px;border-radius:8px;cursor:pointer;font-size:13px}
-  nav button:hover{background:#eaf3f9;border-color:var(--azul2)}
-  main{padding:22px;max-width:1250px;margin:auto}
-  .tarjetas{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:22px}
-  .tarjeta{background:#fff;border:1px solid var(--borde);border-radius:12px;padding:16px}
-  .tarjeta h3{margin:0 0 6px;font-size:14px;color:var(--azul)}
-  .tarjeta .valor{font-size:26px;font-weight:700}
+
+  nav{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    padding:12px 24px;
+    background:#fff;
+    border-bottom:1px solid var(--borde);
+  }
+
+  nav button{
+    border:1px solid var(--borde);
+    background:#fff;
+    padding:9px 13px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:13px;
+  }
+
+  nav button:hover{
+    background:#eaf3f9;
+    border-color:var(--azul2);
+  }
+
+  main{
+    padding:22px;
+    max-width:1250px;
+    margin:auto;
+  }
+
+  .tarjetas{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:14px;
+    margin-bottom:22px;
+  }
+
+  .tarjeta{
+    background:#fff;
+    border:1px solid var(--borde);
+    border-radius:12px;
+    padding:16px;
+  }
+
+  .tarjeta h3{
+    margin:0 0 6px;
+    font-size:14px;
+    color:var(--azul);
+  }
+
+  .tarjeta .valor{
+    font-size:26px;
+    font-weight:700;
+  }
+
   .tarjeta small{color:#67757f}
-  section{display:none;background:#fff;border:1px solid var(--borde);border-radius:12px;padding:18px;margin-bottom:18px}
+
+  section{
+    display:none;
+    background:#fff;
+    border:1px solid var(--borde);
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:18px;
+  }
+
   section.activa{display:block}
-  .cabecera-seccion{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-  .cabecera-seccion h2{margin:0;font-size:18px;color:var(--azul)}
-  .btn{background:var(--verde);color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600}
-  .btn.secundario{background:#fff;color:var(--azul);border:1px solid var(--borde)}
-  table{width:100%;border-collapse:collapse;margin-top:14px;font-size:13px}
-  th,td{border-bottom:1px solid var(--borde);padding:9px;text-align:left;vertical-align:top}
-  th{background:#eef4f8;color:var(--azul)}
-  .modal{display:none;position:fixed;inset:0;background:rgba(10,25,40,.55);padding:20px;overflow:auto}
-  .modal.abierto{display:flex;align-items:flex-start;justify-content:center}
-  .modal-contenido{background:#fff;width:min(760px,100%);border-radius:12px;padding:20px}
-  .modal-contenido h3{margin-top:0;color:var(--azul)}
-  .campos{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
-  label{display:block;font-size:12px;font-weight:600;margin-bottom:5px}
-  input,select,textarea{width:100%;padding:9px;border:1px solid var(--borde);border-radius:7px;font-family:inherit}
-  textarea{min-height:75px;resize:vertical}
-  .acciones{display:flex;justify-content:flex-end;gap:10px;margin-top:16px}
-  .vacio{color:#67757f;font-style:italic;padding:12px 0}
-  .herramientas{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+
+  .cabecera-seccion{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+
+  .cabecera-seccion h2{
+    margin:0;
+    font-size:18px;
+    color:var(--azul);
+  }
+
+  .btn{
+    background:var(--verde);
+    color:#fff;
+    border:none;
+    padding:10px 14px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+  }
+
+  .btn.secundario{
+    background:#fff;
+    color:var(--azul);
+    border:1px solid var(--borde);
+  }
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:14px;
+    font-size:13px;
+  }
+
+  th,td{
+    border-bottom:1px solid var(--borde);
+    padding:9px;
+    text-align:left;
+    vertical-align:top;
+  }
+
+  th{
+    background:#eef4f8;
+    color:var(--azul);
+  }
+
+  .modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(10,25,40,.55);
+    padding:20px;
+    overflow:auto;
+  }
+
+  .modal.abierto{
+    display:flex;
+    align-items:flex-start;
+    justify-content:center;
+  }
+
+  .modal-contenido{
+    background:#fff;
+    width:min(760px,100%);
+    border-radius:12px;
+    padding:20px;
+  }
+
+  .modal-contenido h3{
+    margin-top:0;
+    color:var(--azul);
+  }
+
+  .campos{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:12px;
+  }
+
+  label{
+    display:block;
+    font-size:12px;
+    font-weight:600;
+    margin-bottom:5px;
+  }
+
+  input,select,textarea{
+    width:100%;
+    padding:9px;
+    border:1px solid var(--borde);
+    border-radius:7px;
+    font-family:inherit;
+  }
+
+  textarea{
+    min-height:75px;
+    resize:vertical;
+  }
+
+  .acciones{
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+    margin-top:16px;
+  }
+
+  .vacio{
+    color:#67757f;
+    font-style:italic;
+    padding:12px 0;
+  }
+
+  .herramientas{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:14px;
+  }
 </style>
 </head>
+
 <body>
 
 <header>
@@ -69,14 +247,40 @@
 
 <main>
   <section id="panel" class="activa">
-    <div class="cabecera-seccion"><h2>Panel principal de indicadores</h2></div>
-    <div class="tarjetas">
-      <div class="tarjeta"><h3>Charlas de capacitación</h3><div class="valor" id="kpiCharlas">0</div><small>sesiones registradas</small></div>
-      <div class="tarjeta"><h3>Simulacros ejecutados</h3><div class="valor" id="kpiSimulacros">0</div><small>ejercicios de respuesta</small></div>
-      <div class="tarjeta"><h3>Incidentes y accidentes</h3><div class="valor" id="kpiIncidentes">0</div><small>reportes registrados</small></div>
-      <div class="tarjeta"><h3>Pozos con dossier</h3><div class="valor" id="kpiPozos">0</div><small>PEA / PDVSA MA-01-02-12</small></div>
+    <div class="cabecera-seccion">
+      <h2>Panel principal de indicadores</h2>
     </div>
-    <p>El sistema permite registrar y consultar la gestión de seguridad, higiene, ambiente, salud ocupacional y cumplimiento normativo en operaciones de pozos.</p>
+
+    <div class="tarjetas">
+      <div class="tarjeta">
+        <h3>Charlas de capacitación</h3>
+        <div class="valor" id="kpiCharlas">0</div>
+        <small>sesiones registradas</small>
+      </div>
+
+      <div class="tarjeta">
+        <h3>Simulacros ejecutados</h3>
+        <div class="valor" id="kpiSimulacros">0</div>
+        <small>ejercicios de respuesta</small>
+      </div>
+
+      <div class="tarjeta">
+        <h3>Incidentes y accidentes</h3>
+        <div class="valor" id="kpiIncidentes">0</div>
+        <small>reportes registrados</small>
+      </div>
+
+      <div class="tarjeta">
+        <h3>Pozos con dossier</h3>
+        <div class="valor" id="kpiPozos">0</div>
+        <small>PEA / PDVSA MA-01-02-12</small>
+      </div>
+    </div>
+
+    <p>
+      El sistema permite registrar y consultar la gestión de seguridad, higiene,
+      ambiente, salud ocupacional y cumplimiento normativo en operaciones de pozos.
+    </p>
   </section>
 
   <section id="charlas">
@@ -160,13 +364,30 @@
   </section>
 
   <section id="respaldo">
-    <div class="cabecera-seccion"><h2>Exportar, respaldar y sincronizar</h2></div>
+    <div class="cabecera-seccion">
+      <h2>Exportar, respaldar y sincronizar</h2>
+    </div>
+
     <div class="herramientas">
       <button class="btn" onclick="exportarJSON()">Descargar respaldo JSON</button>
-      <label class="btn secundario" for="importarJSON">Cargar respaldo JSON</label>
-      <input type="file" id="importarJSON" accept=".json" hidden onchange="importarJSON(event)">
+
+      <label class="btn secundario" for="importarJSON">
+        Cargar respaldo JSON
+      </label>
+
+      <input
+        type="file"
+        id="importarJSON"
+        accept=".json"
+        hidden
+        onchange="importarJSON(event)"
+      >
     </div>
-    <p>Los registros se guardan localmente en el navegador. Usa el respaldo JSON para compartir o sincronizar la información entre computadoras.</p>
+
+    <p>
+      Los registros se guardan localmente en el navegador. Usa el respaldo JSON
+      para compartir o sincronizar la información entre computadoras.
+    </p>
   </section>
 </main>
 
@@ -174,6 +395,7 @@
   <div class="modal-contenido">
     <h3 id="modalTitulo">Registrar</h3>
     <div id="modalCampos" class="campos"></div>
+
     <div class="acciones">
       <button class="btn secundario" onclick="cerrarModal()">Cancelar</button>
       <button class="btn" onclick="guardarRegistro()">Guardar</button>
@@ -185,53 +407,210 @@
 const MODULOS = {
   charlas:{
     titulo:"Registrar charla ambiental",
-    campos:["fecha|date","tema|text","departamento|text","expositor|text","asistentes|number"],
+    campos:[
+      "fecha|date",
+      "tema|text",
+      "departamento|text",
+      "expositor|text",
+      "asistentes|number"
+    ],
     columnas:["fecha","tema","departamento","expositor","asistentes"]
   },
+
   vacaciones:{
     titulo:"Registrar vacaciones SIHO-A",
-    campos:["funcionario|text","cargo|text","inicio|date","reincorporacion|date","coordinadorSuplente|text","relevo|text","estatus|text"],
-    columnas:["funcionario","cargo","inicio","reincorporacion","coordinadorSuplente","relevo","estatus"]
+    campos:[
+      "funcionario|text",
+      "cargo|text",
+      "inicio|date",
+      "reincorporacion|date",
+      "coordinadorSuplente|text",
+      "relevo|text",
+      "estatus|text"
+    ],
+    columnas:[
+      "funcionario",
+      "cargo",
+      "inicio",
+      "reincorporacion",
+      "coordinadorSuplente",
+      "relevo",
+      "estatus"
+    ]
   },
+
   simulacros:{
     titulo:"Registrar simulacro SIHO-A",
-    campos:["fecha|date","tipoEscenario|text","ubicacion|text","area|text","tiempoRespuesta|number","observador|text","evaluador|text"],
-    columnas:["fecha","tipoEscenario","ubicacion","area","tiempoRespuesta","observador","evaluador"]
+    campos:[
+      "fecha|date",
+      "tipoEscenario|text",
+      "ubicacion|text",
+      "area|text",
+      "tiempoRespuesta|number",
+      "observador|text",
+      "evaluador|text"
+    ],
+    columnas:[
+      "fecha",
+      "tipoEscenario",
+      "ubicacion",
+      "area",
+      "tiempoRespuesta",
+      "observador",
+      "evaluador"
+    ]
   },
+
   incidentes:{
     titulo:"Registrar incidente o accidente",
-    campos:["fecha|date","descripcion|textarea","clasificacion|select:Incidente operativo,Accidente leve,Accidente incapacitante","diasPerdidos|number","accionCorrectiva|textarea"],
-    columnas:["fecha","descripcion","clasificacion","diasPerdidos","accionCorrectiva"]
+    campos:[
+      "fecha|date",
+      "descripcion|textarea",
+      "clasificacion|select:Incidente operativo,Accidente leve,Accidente incapacitante",
+      "diasPerdidos|number",
+      "accionCorrectiva|textarea"
+    ],
+    columnas:[
+      "fecha",
+      "descripcion",
+      "clasificacion",
+      "diasPerdidos",
+      "accionCorrectiva"
+    ]
   },
+
   delegados:{
     titulo:"Registrar informe de delegado",
-    campos:["fecha|date","delegado|text","responsable|text","areaVerificada|text","hallazgos|textarea","propuestas|textarea","estatus|text"],
-    columnas:["fecha","delegado","responsable","areaVerificada","hallazgos","propuestas","estatus"]
+    campos:[
+      "fecha|date",
+      "delegado|text",
+      "responsable|text",
+      "areaVerificada|text",
+      "hallazgos|textarea",
+      "propuestas|textarea",
+      "estatus|text"
+    ],
+    columnas:[
+      "fecha",
+      "delegado",
+      "responsable",
+      "areaVerificada",
+      "hallazgos",
+      "propuestas",
+      "estatus"
+    ]
   },
+
   comite:{
     titulo:"Registrar acta del Comité SSST",
-    campos:["numeroActa|text","fecha|date","temas|textarea","asistentes|text","miembros|text","acuerdos|textarea"],
-    columnas:["numeroActa","fecha","temas","asistentes","miembros","acuerdos"]
+    campos:[
+      "numeroActa|text",
+      "fecha|date",
+      "temas|textarea",
+      "asistentes|text",
+      "miembros|text",
+      "acuerdos|textarea"
+    ],
+    columnas:[
+      "numeroActa",
+      "fecha",
+      "temas",
+      "asistentes",
+      "miembros",
+      "acuerdos"
+    ]
   },
+
   epidemiologia:{
     titulo:"Registrar vigilancia epidemiológica",
-    campos:["periodo|text","fecha|date","tipoExamen|text","jornada|text","personalEvaluado|text","hallazgos|textarea","aptitud|text"],
-    columnas:["periodo","fecha","tipoExamen","jornada","personalEvaluado","hallazgos","aptitud"]
+    campos:[
+      "periodo|text",
+      "fecha|date",
+      "tipoExamen|text",
+      "jornada|text",
+      "personalEvaluado|text",
+      "hallazgos|textarea",
+      "aptitud|text"
+    ],
+    columnas:[
+      "periodo",
+      "fecha",
+      "tipoExamen",
+      "jornada",
+      "personalEvaluado",
+      "hallazgos",
+      "aptitud"
+    ]
   },
+
   pozos:{
     titulo:"Registrar dossier por pozo terminado",
-    campos:["pozo|text","proyecto|text","distrito|text","ubicacion|text","normaPEA|text","residuosGenerados|text","racda|text","estatusCierre|text"],
-    columnas:["pozo","proyecto","distrito","ubicacion","normaPEA","residuosGenerados","racda","estatusCierre"]
+    campos:[
+      "pozo|text",
+      "proyecto|text",
+      "distrito|text",
+      "ubicacion|text",
+      "normaPEA|text",
+      "residuosGenerados|text",
+      "racda|text",
+      "estatusCierre|text"
+    ],
+    columnas:[
+      "pozo",
+      "proyecto",
+      "distrito",
+      "ubicacion",
+      "normaPEA",
+      "residuosGenerados",
+      "racda",
+      "estatusCierre"
+    ]
   },
+
   desechos:{
     titulo:"Registrar generación de desechos",
-    campos:["fecha|date","clasificacion|select:Desecho peligroso,Desecho doméstico no peligroso","cantidadKg|number","descripcionMaterial|text","areaOrigen|text","empresaGestora|text","destino|text"],
-    columnas:["fecha","clasificacion","cantidadKg","descripcionMaterial","areaOrigen","empresaGestora","destino"]
+    campos:[
+      "fecha|date",
+      "clasificacion|select:Desecho peligroso,Desecho doméstico no peligroso",
+      "cantidadKg|number",
+      "descripcionMaterial|text",
+      "areaOrigen|text",
+      "empresaGestora|text",
+      "destino|text"
+    ],
+    columnas:[
+      "fecha",
+      "clasificacion",
+      "cantidadKg",
+      "descripcionMaterial",
+      "areaOrigen",
+      "empresaGestora",
+      "destino"
+    ]
   },
+
   inspecciones:{
     titulo:"Registrar inspección RACDA",
-    campos:["fecha|date","norma|text","entidad|text","area|text","pozo|text","inspector|text","hallazgos|textarea","estatus|text"],
-    columnas:["fecha","norma","entidad","area","pozo","inspector","hallazgos","estatus"]
+    campos:[
+      "fecha|date",
+      "norma|text",
+      "entidad|text",
+      "area|text",
+      "pozo|text",
+      "inspector|text",
+      "hallazgos|textarea",
+      "estatus|text"
+    ],
+    columnas:[
+      "fecha",
+      "norma",
+      "entidad",
+      "area",
+      "pozo",
+      "inspector",
+      "hallazgos",
+      "estatus"
+    ]
   }
 };
 
@@ -240,12 +619,17 @@ let moduloActual = "";
 let datos = cargarDatos();
 
 document.querySelectorAll("nav button").forEach(b=>{
-  b.addEventListener("click",()=>mostrarSeccion(b.dataset.seccion));
+  b.addEventListener("click",()=>{
+    mostrarSeccion(b.dataset.seccion);
+  });
 });
 
 function cargarDatos(){
-  try{ return JSON.parse(localStorage.getItem("hds_sga_datos")) || {}; }
-  catch(e){ return {}; }
+  try{
+    return JSON.parse(localStorage.getItem("hds_sga_datos")) || {};
+  }catch(error){
+    return {};
+  }
 }
 
 function guardarDatos(){
@@ -254,27 +638,65 @@ function guardarDatos(){
 }
 
 function mostrarSeccion(id){
-  document.querySelectorAll("section").forEach(s=>s.classList.remove("activa"));
+  document.querySelectorAll("section").forEach(s=>{
+    s.classList.remove("activa");
+  });
+
   document.getElementById(id).classList.add("activa");
-  window.scrollTo({top:0,behavior:"smooth"});
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
 }
 
 function abrirModal(modulo){
   moduloActual = modulo;
+
   const config = MODULOS[modulo];
+
   document.getElementById("modalTitulo").textContent = config.titulo;
-  document.getElementById("modalCampos").innerHTML = config.campos.map(c=>{
-    const [nombre,tipo] = c.split("|");
-    const etiqueta = nombre.replace(/([A-Z])/g," $1").replace(/^./,x=>x.toUpperCase());
+
+  document.getElementById("modalCampos").innerHTML = config.campos.map(campo=>{
+    const partes = campo.split("|");
+    const nombre = partes[0];
+    const tipo = partes[1];
+
+    const etiqueta = nombre
+      .replace(/([A-Z])/g," $1")
+      .replace(/^./,letra=>letra.toUpperCase());
+
     if(tipo.startsWith("select:")){
-      const opciones = tipo.split(":")[1].split(",").map(o=>`<option>${o}</option>`).join("");
-      return `<div><label>${etiqueta}</label><select name="${nombre}">${opciones}</select></div>`;
+      const opciones = tipo
+        .split(":")[1]
+        .split(",")
+        .map(opcion=>`<option>${opcion}</option>`)
+        .join("");
+
+      return `
+        <div>
+          <label>${etiqueta}</label>
+          <select name="${nombre}">${opciones}</select>
+        </div>
+      `;
     }
-    if(tipo==="textarea"){
-      return `<div><label>${etiqueta}</label><textarea name="${nombre}"></textarea></div>`;
+
+    if(tipo === "textarea"){
+      return `
+        <div>
+          <label>${etiqueta}</label>
+          <textarea name="${nombre}"></textarea>
+        </div>
+      `;
     }
-    return `<div><label>${etiqueta}</label><input type="${tipo}" name="${nombre}"></div>`;
+
+    return `
+      <div>
+        <label>${etiqueta}</label>
+        <input type="${tipo}" name="${nombre}">
+      </div>
+    `;
   }).join("");
+
   document.getElementById("modal").classList.add("abierto");
 }
 
@@ -286,11 +708,19 @@ function cerrarModal(){
 function guardarRegistro(){
   const config = MODULOS[moduloActual];
   const registro = {};
-  config.campos.forEach(c=>{
-    const nombre = c.split("|")[0];
-    registro[nombre] = document.querySelector(`[name="${nombre}"]`).value.trim();
+
+  config.campos.forEach(campo=>{
+    const nombre = campo.split("|")[0];
+    registro[nombre] = document
+      .querySelector(`[name="${nombre}"]`)
+      .value
+      .trim();
   });
-  if(!datos[moduloActual]) datos[moduloActual] = [];
+
+  if(!datos[moduloActual]){
+    datos[moduloActual] = [];
+  }
+
   datos[moduloActual].unshift(registro);
   guardarDatos();
   cerrarModal();
@@ -298,54 +728,102 @@ function guardarRegistro(){
 
 function crearTabla(modulo,registros){
   const config = MODULOS[modulo];
-  if(!registros || !registros.length){
+
+  if(!registros || registros.length === 0){
     return `<p class="vacio">No hay registros disponibles.</p>`;
   }
-  return `<table><thead><tr>${config.columnas.map(c=>
-    `<th>${c.replace(/([A-Z])/g," $1").replace(/^./,x=>x.toUpperCase())}</th>`).join("")}</tr></thead>
-    <tbody>${registros.map(r=>`<tr>${config.columnas.map(c=>`<td>${r[c]||"—"}</td>`).join("")}</tr>`).join("")}</tbody></table>`;
+
+  const encabezados = config.columnas.map(columna=>{
+    const texto = columna
+      .replace(/([A-Z])/g," $1")
+      .replace(/^./,letra=>letra.toUpperCase());
+
+    return `<th>${texto}</th>`;
+  }).join("");
+
+  const filas = registros.map(registro=>{
+    return `<tr>${
+      config.columnas.map(columna=>{
+        return `<td>${registro[columna] || "—"}</td>`;
+      }).join("")
+    }</tr>`;
+  }).join("");
+
+  return `
+    <table>
+      <thead>
+        <tr>${encabezados}</tr>
+      </thead>
+      <tbody>
+        ${filas}
+      </tbody>
+    </table>
+  `;
 }
 
 function renderizarTodo(){
-  claves.forEach(k=>{
-    const contenedor = document.getElementById("tabla"+k.charAt(0).toUpperCase()+k.slice(1));
-    if(contenedor) contenedor.innerHTML = crearTabla(k,datos[k]);
+  claves.forEach(clave=>{
+    const id = "tabla" + clave.charAt(0).toUpperCase() + clave.slice(1);
+    const contenedor = document.getElementById(id);
+
+    if(contenedor){
+      contenedor.innerHTML = crearTabla(clave,datos[clave]);
+    }
   });
-  document.getElementById("kpiCharlas").textContent = (datos.charlas||[]).length;
-  document.getElementById("kpiSimulacros").textContent = (datos.simulacros||[]).length;
-  document.getElementById("kpiIncidentes").textContent = (datos.incidentes||[]).length;
-  document.getElementById("kpiPozos").textContent = (datos.pozos||[]).length;
+
+  document.getElementById("kpiCharlas").textContent =
+    (datos.charlas || []).length;
+
+  document.getElementById("kpiSimulacros").textContent =
+    (datos.simulacros || []).length;
+
+  document.getElementById("kpiIncidentes").textContent =
+    (datos.incidentes || []).length;
+
+  document.getElementById("kpiPozos").textContent =
+    (datos.pozos || []).length;
 }
 
 function exportarJSON(){
-  const blob = new Blob([JSON.stringify(datos,null,2)],{type:"application/json"});
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "respaldo_hds_sga.json";
-  a.click();
+  const contenido = JSON.stringify(datos,null,2);
+  const blob = new Blob([contenido],{type:"application/json"});
+  const enlace = document.createElement("a");
+
+  enlace.href = URL.createObjectURL(blob);
+  enlace.download = "respaldo_hds_sga.json";
+  enlace.click();
 }
 
 function importarJSON(evento){
   const archivo = evento.target.files[0];
-  if(!archivo) return;
+
+  if(!archivo){
+    return;
+  }
+
   const lector = new FileReader();
-  lector.onload = e=>{
+
+  lector.onload = eventoLectura=>{
     try{
-      datos = JSON.parse(e.target.result);
+      datos = JSON.parse(eventoLectura.target.result);
       guardarDatos();
       alert("Respaldo cargado correctamente.");
     }catch(error){
       alert("El archivo JSON no es válido.");
     }
   };
+
   lector.readAsText(archivo);
 }
 
-document.getElementById("modal").addEventListener("click",e=>{
-  if(e.target.id==="modal") cerrarModal();
+document.getElementById("modal").addEventListener("click",evento=>{
+  if(evento.target.id === "modal"){
+    cerrarModal();
+  }
 });
 
 renderizarTodo();
 </script>
+
 </body>
 </html>
